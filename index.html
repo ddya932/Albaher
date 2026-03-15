@@ -25,6 +25,7 @@ input,textarea,select{width:100%;padding:12px;margin-top:10px;border-radius:10px
 .btn-ord{background:#25d366;color:#fff;width:100%;padding:18px;font-size:20px;font-weight:bold;border:none;border-radius:15px;margin-top:20px;cursor:pointer;box-shadow:0 4px 10px rgba(37,211,102,0.3);}
 .hint{font-size:13px;color:#777;margin-top:5px;text-align:right;}
 .pts-hint{font-size:14px;color:#e67e22;font-weight:bold;margin-top:10px;}
+#loader{padding:20px;color:#888;font-weight:bold;font-size:18px;}
 </style>
 </head>
 <body>
@@ -34,28 +35,8 @@ input,textarea,select{width:100%;padding:12px;margin-top:10px;border-radius:10px
 <div id="status-bar"></div>
 <div class="offer">🎁 عرض الباهر: اجمع 10 نقاط واحصل على وجبة مجانية!</div>
 
-<div class="sec-head" onclick="t('s1')">🍢 الكباب (الكيلو) <span>▼</span></div>
-<div id="s1" class="list" style="display:block;">
-    <div class="item"><div><strong>كباب لحم عجل</strong><br><small>14,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('كباب لحم عجل',14000,1,'q1')">+</button><span class="q-num" id="q1">0</span><button class="btn-q" onclick="u('كباب لحم عجل',14000,-1,'q1')">-</button></div></div>
-    <div class="item"><div><strong>كباب لحم غنم</strong><br><small>18,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('كباب لحم غنم',18000,1,'q2')">+</button><span class="q-num" id="q2">0</span><button class="btn-q" onclick="u('كباب لحم غنم',18000,-1,'q2')">-</button></div></div>
-    <div class="item"><div><strong>كباب دجاج حي</strong><br><small>12,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('كباب دجاج حي',12000,1,'q3')">+</button><span class="q-num" id="q3">0</span><button class="btn-q" onclick="u('كباب دجاج حي',12000,-1,'q3')">-</button></div></div>
-    <div class="item"><div><strong>كباب دجاج كفيل</strong><br><small>8,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('كباب دجاج كفيل',8000,1,'q4')">+</button><span class="q-num" id="q4">0</span><button class="btn-q" onclick="u('كباب دجاج كفيل',8000,-1,'q4')">-</button></div></div>
-</div>
-
-<div class="sec-head" onclick="t('s2')">🍚 التمن (النفر) <span>▼</span></div>
-<div id="s2" class="list">
-    <div class="item"><div><strong>تمن ابيض</strong><br><small>2,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('تمن ابيض',2000,1,'q5')">+</button><span class="q-num" id="q5">0</span><button class="btn-q" onclick="u('تمن ابيض',2000,-1,'q5')">-</button></div></div>
-    <div class="item"><div><strong>تمن احمر</strong><br><small>2,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('تمن احمر',2000,1,'q6')">+</button><span class="q-num" id="q6">0</span><button class="btn-q" onclick="u('تمن احمر',2000,-1,'q6')">-</button></div></div>
-    <div class="item"><div><strong>برياني لحم</strong><br><small>3,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('برياني لحم',3000,1,'q7')">+</button><span class="q-num" id="q7">0</span><button class="btn-q" onclick="u('برياني لحم',3000,-1,'q7')">-</button></div></div>
-    <div class="item"><div><strong>برياني دجاج</strong><br><small>2,500 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('برياني دجاج',2500,1,'q8')">+</button><span class="q-num" id="q8">0</span><button class="btn-q" onclick="u('برياني دجاج',2500,-1,'q8')">-</button></div></div>
-    <div class="item"><div><strong>تمن مندي</strong><br><small>3,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('تمن مندي',3000,1,'q9')">+</button><span class="q-num" id="q9">0</span><button class="btn-q" onclick="u('تمن مندي',3000,-1,'q9')">-</button></div></div>
-    <div class="item"><div><strong>تمن بدون زيت</strong><br><small>2,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('تمن بدون زيت',2000,1,'q10')">+</button><span class="q-num" id="q10">0</span><button class="btn-q" onclick="u('تمن بدون زيت',2000,-1,'q10')">-</button></div></div>
-</div>
-
-<div class="sec-head" onclick="t('s3')">🍗 الدجاج (الدجاجة) <span>▼</span></div>
-<div id="s3" class="list">
-    <div class="item"><div><strong>دجاج حي</strong><br><small>12,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('دجاج حي',12000,1,'q11')">+</button><span class="q-num" id="q11">0</span><button class="btn-q" onclick="u('دجاج حي',12000,-1,'q11')">-</button></div></div>
-    <div class="item"><div><strong>دجاج كفيل</strong><br><small>8,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('دجاج كفيل',8000,1,'q12')">+</button><span class="q-num" id="q12">0</span><button class="btn-q" onclick="u('دجاج كفيل',8000,-1,'q12')">-</button></div></div>
+<div id="dynamic-menu">
+    <div id="loader">⏳ جاري تحميل المنيو وأشهى الأكلات...</div>
 </div>
 
 <div class="cart">
@@ -78,6 +59,7 @@ input,textarea,select{width:100%;padding:12px;margin-top:10px;border-radius:10px
 </div>
 
 <script>
+// أوقات العمل
 let hr = new Date().getHours();
 let sb = document.getElementById('status-bar');
 if(hr >= 2 && hr < 6){
@@ -90,6 +72,7 @@ if(hr >= 2 && hr < 6){
 
 let c={}; let sub=0; let pts=0;
 const r=new URLSearchParams(window.location.search).get('ref')||'مباشر';
+
 function t(id){let e=document.getElementById(id);e.style.display=(e.style.display==='block')?'none':'block';}
 function u(n,p,ch,id){
     if(!c[n])c[n]={q:0,p:p,i:id};
@@ -117,8 +100,6 @@ function calc(){
     document.getElementById('del-t').innerText=del.toLocaleString();
     let total=sub>0?sub+del:0;
     document.getElementById('tot').innerText=total.toLocaleString();
-    
-    // حساب النقاط (كل 10 آلاف نقطة)
     pts = Math.floor(sub / 10000);
     document.getElementById('pts-show').innerText = sub > 0 ? `🌟 ستربح (${pts}) نقطة من هذا الطلب!` : "سيتم احتساب نقاطك بعد الإضافة!";
 }
@@ -128,14 +109,20 @@ function send(){
     const dSel=document.getElementById('del-area');
     const dTxt=dSel.options[dSel.selectedIndex].text;
     let v=document.getElementById('tot').innerText;
-    
     if(!n||!p||!a||sub===0){alert("الرجاء ملء البيانات واختيار الوجبات!");return;}
     let o="";for(let k in c){o+=`• ${k} (العدد: ${c[k].q})%0A`;}
-    
     let ptsMsg = pts > 0 ? `%0A🎁 مبروك! كسبت (${pts}) نقطة بهذا الطلب.` : '';
     let m=`*طلب جديد - مطعم الباهر*%0A👤 الاسم: ${n}%0A📱 الهاتف: ${p}%0A🏠 العنوان: ${a}%0A🚚 ${dTxt}%0A📝 ملاحظات: ${notes}%0A------------------%0A🍴 الطلبات:%0A${o}------------------%0A💰 الإجمالي الكلي: ${v} د.ع${ptsMsg}%0A📢 المصدر: ${r}`;
     window.open(`https://wa.me/9647830834849?text=${m}`,'_blank');
 }
-</script>
-</body>
-</html>
+
+// السحر هنا: جلب البيانات من ملف الإكسل مالتك
+const sheetUrl = 'https://docs.google.com/spreadsheets/d/1hiDCMhNrJZ8KdbxSQBANzgey_0gUf3SrGsW4HQIjAM0/export?format=csv';
+
+fetch(sheetUrl)
+.then(res => res.text())
+.then(csvText => {
+    let rows = csvText.split('\n');
+    let menuData = {};
+    
+    // نبدأ من السطر الثاني (i=1) حتى
