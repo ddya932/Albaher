@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منيو مطعم الباهر - AL_Baher</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f4; margin: 0; padding: 15px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #7f8c8d; font-size: 0.9em; margin-bottom: 20px; }
+        
+        .category-btn {
+            background-color: #34495e; color: white; cursor: pointer; padding: 15px; width: 100%; border: none;
+            text-align: right; font-size: 1.1em; font-weight: bold; border-radius: 8px; margin-top: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .category-btn:hover { background-color: #2c3e50; }
+        .category-btn::after { content: '▼'; font-size: 0.7em; transition: 0.3s; }
+        .category-btn.active::after { transform: rotate(180deg); }
+        
+        .category-content { display: none; padding: 5px 10px; background-color: #fff; border: 1px solid #ddd; border-top: none; border-radius: 0 0 8px 8px; }
+        .category-content.active { display: block; }
+
+        .menu-item { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 12px 0; }
+        .menu-item:last-child { border-bottom: none; }
+        .item-name { font-weight: bold; color: #333; }
+        .item-price { color: #e74c3c; font-weight: bold; font-size: 0.9em; margin-top: 4px; }
+        
+        .controls { display: flex; align-items: center; }
+        .qty-btn { background-color: #f39c12; color: white; border: none; width: 35px; height: 35px; font-size: 1.2em; cursor: pointer; border-radius: 50%; margin: 0 8px; }
+        .qty { font-weight: bold; font-size: 1.1em; min-width: 20px; text-align: center; }
+        
+        #cart { margin-top: 30px; padding: 15px; background: #ecf0f1; border-radius: 10px; border: 1px dashed #bdc3c7; }
+        .total-price { text-align: left; font-size: 1.2em; font-weight: bold; color: #27ae60; margin: 15px 0; }
+        .checkout-btn { width: 100%; background-color: #27ae60; color: white; border: none; padding: 18px; font-size: 1.2em; font-weight: bold; cursor: pointer; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        #cart.hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>مطعم الباهر (AL_Baher) 🍽️</h1>
+    <p class="subtitle">أهلاً بك! اختر طلبك وسيتم توجيهك للواتساب لتأكيده</p>
+    
+    <div id="menu-container"></div>
+
+    <div id="cart" class="hidden">
+        <h3>سلة الطلبات 🛒</h3>
+        <div id="cart-items"></div>
+        <div class="total-price">الإجمالي: <span id="final-price">0</span> د.ع</div>
+        <button class="checkout-btn" onclick="sendToWhatsApp()">✅ إرسال الطلب عبر الواتساب</button>
+    </div>
+</div>
+
+<script>
+    const MY_PHONE_NUMBER = "9647830834849"; 
+    
+    const menuData = [
+        {
+            categoryName: "قسم الكباب",
+            items: [
+                { id: 1, name: "كباب دجاج", price: 0 },
+                { id: 2, name: "كباب لحم غنم", price: 20000 },
+                { id: 3, name: "كباب لحم بقر", price: 0 },
+                { id: 4, name: "كباب لحم الكفيل", price: 0 },
+                { id: 5, name: "كباب دجاج الكفيل", price: 0 }
+            ]
+        },
+        {
+            categoryName: "قسم التمن والمراگ",
+            items: [
+                { id: 6, name: "تمن أحمر", price: 0 }, { id: 7, name: "تمن أبيض", price: 0 },
+                { id: 8, name: "تمن مندي", price: 0 }, { id: 9, name: "تمن برياني", price: 0 },
+                { id: 10, name: "مرگ بامية", price: 0 }, { id: 11, name: "مرگ تبسي", price: 0 },
+                { id: 12, name: "مرگ يابسة", price: 0 }, { id: 13, name: "مرگ عدس", price: 0 },
+                { id: 14, name: "مرگ قيمة", price: 0 }, { id: 15, name: "مرگ باقلاء", price: 0 }
+            ]
+        },
+        {
+            categoryName: "قسم الدجاج",
+            items: [
+                { id: 16, name: "دجاج الكفيل", price: 0 },
+                { id: 17, name: "دجاج حي", price: 0 },
+                { id: 18, name: "دجاج ناشف", price: 10000 },
+                { id: 19, name: "مندي دجاج", price: 16000 }
+            ]
+        }
+    ];
+
+    let cart = {}; 
+    const urlParams = new URLSearchParams(window.location.search);
+    const advertiserName = urlParams.get('ref') || "زبون مباشر";
+    const allItems = []; 
+
+    function renderMenu() {
+        const container = document.getElementById('menu-container');
+        menuData.forEach((category, catIndex) => {
+            let catHTML = `<button class="category-btn" onclick="toggleCategory(${catIndex})">${category.categoryName}</button>
+                           <div class="category-content" id="cat-${catIndex}">`;
+            category.items.forEach(item => {
+                allItems.push(item);
+                catHTML += `<div class="menu-item">
+                                <div><div class="item-name">${item.name}</div>
+                                <div class="item-price">${item.price === 0 ? 'حسب الوزن/الطلب' : item.price.toLocaleString() + ' د.ع'}</div></div>
+                                <div class="controls">
+                                    <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+                                    <span class="qty" id="qty-${item.id}">0</span>
+                                    <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+                                </div>
+                            </div>`;
+            });
+            container.innerHTML += catHTML + `</div>`;
+        });
+    }
+
+    function toggleCategory(index) {
+        document.getElementById(`cat-${index}`).classList.toggle("active");
+        document.getElementById(`cat-${index}`).previousElementSibling.classList.toggle("active");
+    }
+
+    function changeQty(id, change) {
+        cart[id] = (cart[id] || 0) + change;
+        if (cart[id] <= 0) delete cart[id];
+        updateCart();
+    }
+
+    function updateCart() {
+        let total = 0, hasItems = false;
+        const cartItemsDiv = document.getElementById('cart-items');
+        cartItemsDiv.innerHTML = "";
+        
+        allItems.forEach(item => {
+            const qty = cart[item.id] || 0;
+            const qtySpan = document.getElementById(`qty-${item.id}`);
+            if(qtySpan) qtySpan.innerText = qty;
+            if(qty > 0) {
+                hasItems = true;
+                total += item.price * qty;
+                cartItemsDiv.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                                            <span>${item.name} (x${qty})</span>
+                                            <span>${(item.price * qty).toLocaleString()} د.ع</span>
+                                           </div>`;
+            }
+        });
+        document.getElementById('final-price').innerText = total.toLocaleString();
+        document.getElementById('cart').classList.toggle('hidden', !hasItems);
+    }
+
+    function sendToWhatsApp() {
+        let msg = `*طلب جديد من مطعم الباهر* 🍽️\n--------------------------\n`;
+        let total = 0;
+        for (const id in cart) {
+            const item = allItems.find(i => i.id == id);
+            total += item.price * cart[id];
+            msg += `▫️ *${item.name}* (الكمية: ${cart[id]})\n`;
+        }
+        msg += `--------------------------\n💰 *الإجمالي المتوقع: ${total.toLocaleString()} د.ع*\n`;
+        msg += `🔍 *المصدر:* إعلان ${advertiserName}\n--------------------------\nيرجى تأكيد الطلب وإرسال الموقع 👇`;
+        window.open(`https://wa.me/${MY_PHONE_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+    renderMenu();
+</script>
+</body>
+</html>
