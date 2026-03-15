@@ -3,114 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مطعم الباهر - طلب أونلاين</title>
+    <title>مطعم الباهر - المنيو الذكي</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; text-align: center; }
-        .container { max-width: 500px; background: white; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        h1 { color: #e44d26; }
-        .item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #ddd; }
-        .item span { font-weight: bold; }
-        button { background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
-        .order-btn { background: #25d366; width: 100%; padding: 15px; font-size: 18px; margin-top: 20px; font-weight: bold; }
+        body { font-family: 'Arial', sans-serif; background-color: #f8f9fa; margin: 0; padding: 15px; text-align: center; color: #333; }
+        .container { max-width: 500px; background: white; margin: auto; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1 { color: #d32f2f; margin-bottom: 5px; }
+        .category-btn { background: #34495e; color: white; width: 100%; padding: 12px; border: none; border-radius: 10px; margin-top: 10px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .items-container { display: none; background: #fff; border: 1px solid #ddd; border-top: none; padding: 10px; border-radius: 0 0 10px 10px; }
+        .item { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #eee; }
+        .item:last-child { border-bottom: none; }
+        .price { color: #2ecc71; font-weight: bold; margin-left: 10px; }
+        .add-btn { background: #e67e22; color: white; border: none; padding: 5px 12px; border-radius: 8px; cursor: pointer; }
+        .cart-section { background: #fff3cd; padding: 15px; margin-top: 25px; border-radius: 15px; border: 2px dashed #ffc107; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 8px; margin-bottom: 5px; border-radius: 5px; font-size: 14px; }
+        .remove-btn { background: #ff4d4d; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .input-group { margin-top: 15px; text-align: right; }
-        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
-        .cart { background: #fff3cd; padding: 10px; margin-top: 20px; border-radius: 10px; border: 1px dashed #856404; }
+        input, textarea { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; }
+        .order-btn { background: #25d366; color: white; width: 100%; padding: 18px; font-size: 20px; margin-top: 20px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>🔥 مطعم الباهر 🔥</h1>
-    <p>اختر وجباتك المفضلة</p>
+    <p>أهلاً بك! اختر طلبك وسيتم توجيهك للواتساب</p>
 
-    <div id="menu">
+    <button class="category-btn" onclick="toggleSection('kebab')">قسم الكباب <span>▼</span></button>
+    <div id="kebab" class="items-container">
         <div class="item">
-            <span>كباب دجاج (15,000 د.ع)</span>
-            <button onclick="addToCart('كباب دجاج', 15000)">إضافة +</button>
+            <span>كباب دجاج</span>
+            <div><span class="price">15,000 د.ع</span> <button class="add-btn" onclick="addToCart('كباب دجاج', 15000)">إضافة +</button></div>
         </div>
         <div class="item">
-            <span>نصف دجاجة شواية (7,000 د.ع)</span>
-            <button onclick="addToCart('نصف دجاجة', 7000)">إضافة +</button>
-        </div>
-        <div class="item">
-            <span>نفر كص لحم (12,000 د.ع)</span>
-            <button onclick="addToCart('كص لحم', 12000)">إضافة +</button>
+            <span>كباب لحم غنم</span>
+            <div><span class="price">20,000 د.ع</span> <button class="add-btn" onclick="addToCart('كباب لحم غنم', 20000)">إضافة +</button></div>
         </div>
     </div>
 
-    <div class="cart">
-        <strong>السلة:</strong>
-        <ul id="cart-list" style="list-style: none; padding: 0;"></ul>
-        <strong>الإجمالي: <span id="total-price">0</span> د.ع</strong>
+    <button class="category-btn" onclick="toggleSection('chicken')">قسم الدجاج <span>▼</span></button>
+    <div id="chicken" class="items-container">
+        <div class="item">
+            <span>نصف دجاجة شواية</span>
+            <div><span class="price">7,000 د.ع</span> <button class="add-btn" onclick="addToCart('نصف دجاجة', 7000)">إضافة +</button></div>
+        </div>
+        <div class="item">
+            <span>دجاجة كاملة شواية</span>
+            <div><span class="price">13,000 د.ع</span> <button class="add-btn" onclick="addToCart('دجاجة كاملة', 13000)">إضافة +</button></div>
+        </div>
     </div>
 
-    <hr>
-
-    <div class="input-group">
-        <label>👤 اسم الزبون:</label>
-        <input type="text" id="customer-name" placeholder="ادخل اسمك الكامل">
-    </div>
-    <div class="input-group">
-        <label>📱 رقم الهاتف:</label>
-        <input type="tel" id="customer-phone" placeholder="رقمك للتواصل">
-    </div>
-    <div class="input-group">
-        <label>🏠 العنوان الكامل:</label>
-        <textarea id="customer-address" rows="3" placeholder="المنطقة، الشارع، أقرب نقطة دالة"></textarea>
+    <div class="cart-section">
+        <strong>🛒 سلة الطلبات:</strong>
+        <div id="cart-list" style="margin-top: 10px;"></div>
+        <div style="margin-top: 10px; font-size: 18px; font-weight: bold;">الإجمالي: <span id="total-price" style="color: #d32f2f;">0</span> د.ع</div>
     </div>
 
-    <button class="order-btn" onclick="sendOrder()">إرسال الطلب عبر الواتساب ✅</button>
+    <div class="input-group">
+        <input type="text" id="cust-name" placeholder="👤 اسمك الكامل">
+        <input type="tel" id="cust-phone" placeholder="📱 رقم الهاتف">
+        <textarea id="cust-address" rows="2" placeholder="🏠 العنوان بالتفصيل (المنطقة، الشارع، نقطة دالة)"></textarea>
+    </div>
+
+    <button class="order-btn" onclick="sendWhatsApp()">إرسال الطلب عبر واتساب ✅</button>
 </div>
 
 <script>
     let cart = [];
-    let totalPrice = 0;
-
-    // معرفة المصدر (مثلاً hanan أو ali)
+    let total = 0;
     const urlParams = new URLSearchParams(window.location.search);
-    const referral = urlParams.get('ref') || 'زبون مباشر';
+    const ref = urlParams.get('ref') || 'زبون مباشر';
+
+    function toggleSection(id) {
+        let el = document.getElementById(id);
+        el.style.display = (el.style.display === "block") ? "none" : "block";
+    }
 
     function addToCart(name, price) {
         cart.push({name, price});
-        totalPrice += price;
-        updateUI();
+        total += price;
+        renderCart();
     }
 
-    function updateUI() {
+    function removeFromCart(index) {
+        total -= cart[index].price;
+        cart.splice(index, 1);
+        renderCart();
+    }
+
+    function renderCart() {
         const list = document.getElementById('cart-list');
-        list.innerHTML = "";
-        cart.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = `• ${item.name} (${item.price.toLocaleString()} د.ع)`;
-            list.appendChild(li);
-        });
-        document.getElementById('total-price').textContent = totalPrice.toLocaleString();
+        list.innerHTML = cart.map((item, index) => `
+            <div class="cart-item">
+                <span>${item.name}</span>
+                <span>${item.price.toLocaleString()} د.ع <button class="remove-btn" onclick="removeFromCart(${index})">مسح</button></span>
+            </div>
+        `).join('');
+        document.getElementById('total-price').textContent = total.toLocaleString();
     }
 
-    function sendOrder() {
-        const name = document.getElementById('customer-name').value;
-        const phone = document.getElementById('customer-phone').value;
-        const address = document.getElementById('customer-address').value;
+    function sendWhatsApp() {
+        const name = document.getElementById('cust-name').value;
+        const phone = document.getElementById('cust-phone').value;
+        const address = document.getElementById('cust-address').value;
 
         if (cart.length === 0) { alert("السلة فارغة!"); return; }
-        if (!name || !phone || !address) { alert("الرجاء ملء جميع المعلومات (الاسم، الهاتف، العنوان)!"); return; }
+        if (!name || !phone || !address) { alert("الرجاء إكمال البيانات!"); return; }
 
-        let orderDetails = cart.map(item => `- ${item.name}`).join('%0A');
-        
-        // بناء الرسالة للواتساب
-        let message = `*طلب جديد من مطعم الباهر*%0A`;
-        message += `--------------------------%0A`;
-        message += `👤 *الاسم:* ${name}%0A`;
-        message += `📱 *الهاتف:* ${phone}%0A`;
-        message += `🏠 *العنوان:* ${address}%0A`;
-        message += `--------------------------%0A`;
-        message += `🍴 *الطلبات:*%0A${orderDetails}%0A`;
-        message += `--------------------------%0A`;
-        message += `💰 *الإجمالي:* ${totalPrice.toLocaleString()} د.ع%0A`;
-        message += `📢 *المصدر:* إعلان ${referral}`;
+        let itemsText = cart.map(i => `• ${i.name}`).join('%0A');
+        let msg = `*طلب جديد - مطعم الباهر*%0A`;
+        msg += `--------------------------%0A`;
+        msg += `👤 *الاسم:* ${name}%0A📱 *الهاتف:* ${phone}%0A🏠 *العنوان:* ${address}%0A`;
+        msg += `--------------------------%0A`;
+        msg += `🍴 *الطلبات:*%0A${itemsText}%0A`;
+        msg += `💰 *الإجمالي:* ${total.toLocaleString()} د.ع%0A`;
+        msg += `📢 *المصدر:* إعلان ${ref}`;
 
-        // رقم واتساب المطعم (تأكد من كتابته بشكل صحيح بدون أصفار في البداية)
-        window.open(`https://wa.me/9647823906644?text=${message}`, '_blank');
+        window.open(`https://wa.me/9647823906644?text=${msg}`, '_blank');
     }
 </script>
 
