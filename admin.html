@@ -1,21 +1,45 @@
-<div id="p2" class="panel">
-    <input type="text" id="r_name" placeholder="اسم المطعم">
-    <input type="text" id="r_offer" placeholder="🎁 عرض اليوم (مثلاً: اطلب 5 كباب واحصل على بيبسي مجاناً)">
-    <input type="text" id="r_time" placeholder="وقت التجهيز (مثلاً: 20-30 دقيقة)">
-    <textarea id="r_msg" rows="3" placeholder="رسالة الترحيب"></textarea>
-    <button class="btn-save" onclick="saveSet()">💾 حفظ الإعدادات</button>
-</div>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>إدارة مطعم الباهر</title><style>
+:root{--p:#d32f2f;--s:#2c3e50;--bg:#f0f2f5}
+body{font-family:Arial;padding:10px;background:var(--bg);margin:0;direction:rtl}
+.box{max-width:500px;background:#fff;padding:20px;margin:10px auto;border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+.tabs{display:flex;gap:5px;margin-bottom:15px} .tabs button{flex:1;padding:12px;cursor:pointer;border:none;border-radius:10px;background:#ddd;font-weight:bold} .tabs .active{background:var(--p);color:#fff}
+.panel{display:none} .show{display:block}
+input,textarea,button,select{width:100%;padding:14px;margin-top:10px;border-radius:12px;border:1px solid #ccc;box-sizing:border-box;font-size:15px}
+.btn-save{background:#28a745;color:#fff;font-weight:bold;border:none;cursor:pointer}
+.item-row{background:#f9f9f9;padding:12px;margin-top:10px;border-radius:12px;border-right:5px solid var(--p);text-align:right}
+.link-box{background:#e7f3ff;padding:15px;border-radius:12px;margin-top:15px;border:1px dashed #007bff;word-break:break-all}
+</style></head><body><div class="box">
+    <h2 style="color:var(--p)">👑 مركز قيادة الباهر</h2>
+    <div class="tabs"><button id="t1" class="active" onclick="tab(1)">🍔 الأصناف</button><button id="t2" onclick="tab(2)">⚙️ الإعدادات</button><button id="t3" onclick="tab(3)">📢 المعلنين</button></div>
+    
+    <div id="p1" class="panel show">
+        <input type="text" id="cat" placeholder="القسم (مشويات - كباب)"><input type="text" id="name" placeholder="اسم الأكلة"><input type="number" id="price" placeholder="السعر"><button class="btn-save" onclick="add()">➕ إضافة أكلة</button><hr><div id="list">⏳ جاري التحميل...</div>
+    </div>
 
+    <div id="p2" class="panel">
+        <label>اسم المطعم:</label><input type="text" id="r_name">
+        <label>🎁 عرض اليوم:</label><input type="text" id="r_offer" placeholder="اكتب العرض هنا">
+        <label>⏳ وقت التجهيز:</label><input type="text" id="r_time">
+        <label>💬 رسالة الترحيب:</label><textarea id="r_msg" rows="3"></textarea>
+        <button class="btn-save" onclick="saveSet()">💾 حفظ الإعدادات</button>
+    </div>
+
+    <div id="p3" class="panel">
+        <h3>🔗 مولد روابط المعلنين</h3>
+        <input type="text" id="adv_name" placeholder="اسم المعلن (بالإنجليزي)">
+        <button class="btn-save" style="background:#007bff" onclick="gen()">✨ توليد ونسخ الرابط</button>
+        <div id="res" class="link-box" style="display:none"><b>الرابط:</b><br><span id="url"></span></div>
+    </div>
+</div>
 <script>
-// تحديث دالة الحفظ لتشمل العرض
-async function saveSet(){
-    const name=document.getElementById('r_name').value,
-          offer=document.getElementById('r_offer').value,
-          time=document.getElementById('r_time').value,
-          msg=document.getElementById('r_msg').value;
-    await fetch(DB+"settings.json",{method:'PUT',body:JSON.stringify({name,offer,time,msg})});
-    alert("تم الحفظ ✅");
-}
-// تحديث دالة التحميل (Load) لتسحب العرض
-if(s.offer) document.getElementById('r_offer').value = s.offer;
-</script>
+const DB="https://albaher-1ec78-default-rtdb.firebaseio.com/", MY="https://ddya932.github.io/Albaher/";
+function tab(n){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));document.getElementById('p'+n).classList.add('show');document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));document.getElementById('t'+n).classList.add('active');}
+function gen(){const n=document.getElementById('adv_name').value.trim();if(!n)return alert("اكتب الاسم!");const f=MY+"?ref="+encodeURIComponent(n);document.getElementById('url').innerText=f;document.getElementById('res').style.display='block';navigator.clipboard.writeText(f);alert("تم النسخ!");}
+async function add(){const cat=document.getElementById('cat').value,name=document.getElementById('name').value,price=document.getElementById('price').value;if(!cat||!name||!price)return alert("املأ الحقول!");await fetch(DB+"items.json",{method:'POST',body:JSON.stringify({cat,name,price:parseInt(price),stock:true,clicks:0})});location.reload();}
+async function del(id){if(confirm("حذف؟")){await fetch(`${DB}items/${id}.json`,{method:'DELETE'});location.reload()}}
+async function saveSet(){const name=document.getElementById('r_name').value,offer=document.getElementById('r_offer').value,msg=document.getElementById('r_msg').value,time=document.getElementById('r_time').value;await fetch(DB+"settings.json",{method:'PUT',body:JSON.stringify({name,offer,msg,time})});alert("تم الحفظ ✅");}
+async function load(){
+    const resI=await fetch(DB+"items.json");const items=await resI.json();let h='';for(let id in items){let it=items[id];h+=`<div class="item-row"><b>${it.cat} > ${it.name}</b> <button style="background:#ff4d4d;color:#fff;border:none;padding:5px;border-radius:8px" onclick="del('${id}')">حذف</button></div>`}document.getElementById('list').innerHTML=h||'فارغ';
+    const resS=await fetch(DB+"settings.json");const s=await resS.json();if(s){document.getElementById('r_name').value=s.name||'';document.getElementById('r_offer').value=s.offer||'';document.getElementById('r_msg').value=s.msg||'';document.getElementById('r_time').value=s.time||'';}
+}load();
+</script></body></html>
