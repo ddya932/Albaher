@@ -2,94 +2,133 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>منيو مطعم الباهر</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منيو مطعم الباهر الاحترافي</title>
     <style>
-        body { font-family: sans-serif; background: #eee; padding: 10px; text-align: center; }
-        .card { background: white; padding: 15px; border-radius: 15px; max-width: 400px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h1 { color: red; }
-        .section { background: #333; color: white; padding: 10px; margin-top: 15px; border-radius: 5px; font-weight: bold; }
-        .item { border-bottom: 1px solid #ddd; padding: 10px 0; display: flex; justify-content: space-between; align-items: center; }
-        button.add { background: green; color: white; border: none; padding: 8px; border-radius: 5px; }
-        .cart { background: #fff3cd; padding: 10px; margin-top: 20px; border-radius: 10px; border: 2px solid #ffc107; }
-        .cart-item { background: white; margin-bottom: 5px; padding: 5px; display: flex; justify-content: space-between; align-items: center; border-radius: 5px; }
-        button.del { background: red; color: white; border: none; padding: 5px; border-radius: 3px; font-size: 12px; }
-        input, textarea { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .order-btn { background: #25d366; color: white; width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; margin-top: 20px; }
+        body { font-family: 'Arial', sans-serif; background: #f4f7f6; margin: 0; padding: 10px; text-align: center; }
+        .container { max-width: 480px; background: white; margin: auto; padding: 15px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        h1 { color: #d32f2f; margin-bottom: 5px; }
+        .section-header { background: #2c3e50; color: white; padding: 12px; margin-top: 10px; border-radius: 10px; cursor: pointer; display: flex; justify-content: space-between; font-weight: bold; }
+        .items-list { display: none; padding: 5px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px; }
+        .item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; }
+        .controls { display: flex; align-items: center; gap: 10px; }
+        .btn-qty { background: #e67e22; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; }
+        .cart-area { background: #fff3cd; border: 2px dashed #ffc107; border-radius: 15px; padding: 15px; margin-top: 20px; text-align: right; }
+        .cart-row { display: flex; justify-content: space-between; margin-bottom: 8px; background: white; padding: 8px; border-radius: 8px; font-size: 14px; }
+        .btn-del { background: #ff4d4d; color: white; border: none; padding: 3px 8px; border-radius: 5px; cursor: pointer; }
+        .inputs input, .inputs textarea { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; text-align: right; }
+        .order-btn { background: #25d366; color: white; width: 100%; padding: 18px; font-size: 20px; font-weight: bold; border: none; border-radius: 12px; margin-top: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="card">
+<div class="container">
     <h1>🔥 مطعم الباهر 🔥</h1>
+    <p>أهلاً بك! اختر وجباتك المفضلة</p>
 
-    <div class="section">🍴 المشويات</div>
-    <div class="item">
-        <span>كباب دجاج (15,000)</span>
-        <button class="add" onclick="add('كباب دجاج', 15000)">إضافة +</button>
-    </div>
-    <div class="item">
-        <span>نصف دجاجة (7,000)</span>
-        <button class="add" onclick="add('نصف دجاجة', 7000)">إضافة +</button>
+    <div class="section-header" onclick="toggle('sec1')">🍢 قسم المشويات <span>▼</span></div>
+    <div id="sec1" class="items-list" style="display:block;">
+        <div class="item">
+            <span>كباب دجاج (15,000)</span>
+            <div class="controls">
+                <button class="btn-qty" onclick="changeQty('كباب دجاج', 15000, 1)">+</button>
+                <span id="qty-كباب دجاج">0</span>
+                <button class="btn-qty" onclick="changeQty('كباب دجاج', 15000, -1)">-</button>
+            </div>
+        </div>
+        <div class="item">
+            <span>نصف دجاجة (7,000)</span>
+            <div class="controls">
+                <button class="btn-qty" onclick="changeQty('نصف دجاجة', 7000, 1)">+</button>
+                <span id="qty-نصف دجاجة">0</span>
+                <button class="btn-qty" onclick="changeQty('نصف دجاجة', 7000, -1)">-</button>
+            </div>
+        </div>
     </div>
 
-    <div class="section">🍚 الوجبات</div>
-    <div class="item">
-        <span>تمن وعكود (10,000)</span>
-        <button class="add" onclick="add('تمن وعكود', 10000)">إضافة +</button>
+    <div class="section-header" onclick="toggle('sec2')">🍚 الرز والوجبات <span>▼</span></div>
+    <div id="sec2" class="items-list">
+        <div class="item">
+            <span>تمن وعكود (10,000)</span>
+            <div class="controls">
+                <button class="btn-qty" onclick="changeQty('تمن وعكود', 10000, 1)">+</button>
+                <span id="qty-تمن وعكود">0</span>
+                <button class="btn-qty" onclick="changeQty('تمن وعكود', 10000, -1)">-</button>
+            </div>
+        </div>
     </div>
 
-    <div class="cart">
-        <strong>🛒 سلتك:</strong>
-        <div id="list"></div>
+    <div class="cart-area">
+        <strong>🛒 طلباتك الحالية:</strong>
+        <div id="cart-items" style="margin-top:10px;"></div>
         <hr>
-        <strong>المجموع: <span id="total">0</span> د.ع</strong>
+        <div style="font-size: 18px; font-weight: bold;">الإجمالي: <span id="total" style="color:red">0</span> د.ع</div>
     </div>
 
-    <input type="text" id="user-name" placeholder="👤 اسمك">
-    <input type="tel" id="user-phone" placeholder="📱 رقمك">
-    <textarea id="user-addr" placeholder="🏠 عنوانك بالتفصيل"></textarea>
+    <div class="inputs">
+        <input type="text" id="name" placeholder="👤 اسم الزبون">
+        <input type="tel" id="phone" placeholder="📱 رقم الهاتف">
+        <textarea id="addr" rows="2" placeholder="🏠 العنوان بالتفصيل"></textarea>
+    </div>
 
     <button class="order-btn" onclick="send()">إرسال الطلب واتساب ✅</button>
 </div>
 
 <script>
-    let cart = [];
-    let sum = 0;
+    let cart = {};
+    let total = 0;
     const ref = new URLSearchParams(window.location.search).get('ref') || 'مباشر';
 
-    function add(n, p) {
-        cart.push({n, p});
-        sum += p;
-        render();
+    function toggle(id) {
+        let el = document.getElementById(id);
+        el.style.display = (el.style.display === 'block') ? 'none' : 'block';
     }
 
-    function remove(i) {
-        sum -= cart[i].p;
-        cart.splice(i, 1);
-        render();
+    function changeQty(name, price, change) {
+        if (!cart[name]) cart[name] = { qty: 0, price: price };
+        cart[name].qty += change;
+        if (cart[name].qty <= 0) {
+            delete cart[name];
+            if(document.getElementById('qty-'+name)) document.getElementById('qty-'+name).innerText = 0;
+        } else {
+            document.getElementById('qty-'+name).innerText = cart[name].qty;
+        }
+        updateCart();
     }
 
-    function render() {
-        const d = document.getElementById('list');
-        d.innerHTML = cart.map((item, i) => `
-            <div class="cart-item">
-                <span>${item.n}</span>
-                <span>${item.p.toLocaleString()} <button class="del" onclick="remove(${i})">حذف</button></span>
-            </div>
-        `).join('');
-        document.getElementById('total').textContent = sum.toLocaleString();
+    function updateCart() {
+        const div = document.getElementById('cart-items');
+        div.innerHTML = "";
+        total = 0;
+        for (let name in cart) {
+            let itemPrice = cart[name].qty * cart[name].price;
+            total += itemPrice;
+            div.innerHTML += `
+                <div class="cart-row">
+                    <span>${name} (x${cart[name].qty})</span>
+                    <span>${itemPrice.toLocaleString()} <button class="btn-del" onclick="deleteFromCart('${name}')">حذف</button></span>
+                </div>`;
+        }
+        document.getElementById('total').innerText = total.toLocaleString();
+    }
+
+    function deleteFromCart(name) {
+        delete cart[name];
+        if(document.getElementById('qty-'+name)) document.getElementById('qty-'+name).innerText = 0;
+        updateCart();
     }
 
     function send() {
-        const name = document.getElementById('user-name').value;
-        const phone = document.getElementById('user-phone').value;
-        const addr = document.getElementById('user-addr').value;
+        const n = document.getElementById('name').value;
+        const p = document.getElementById('phone').value;
+        const a = document.getElementById('addr').value;
 
-        if(!name || !phone || !addr || cart.length === 0) { alert('املأ البيانات والطلبات!'); return; }
+        if(!n || !p || !a || total === 0) { alert('اكمل البيانات واضف وجبات!'); return; }
 
-        let items = cart.map(i => `• ${i.n}`).join('%0A');
-        let msg = `*طلب جديد - الباهر*%0A👤 الاسم: ${name}%0A📱 الهاتف: ${phone}%0A🏠 العنوان: ${addr}%0A🍴 الطلبات:%0A${items}%0A💰 المجموع: ${sum.toLocaleString()}%0A📢 المصدر: ${ref}`;
+        let itemsText = "";
+        for (let name in cart) { itemsText += `• ${name} (الكمية: ${cart[name].qty})%0A`; }
+
+        let msg = `*طلب جديد - مطعم الباهر*%0A👤 الاسم: ${n}%0A📱 الهاتف: ${p}%0A🏠 العنوان: ${a}%0A------------------%0A🍴 الطلبات:%0A${itemsText}------------------%0A💰 الإجمالي: ${total.toLocaleString()} د.ع%0A📢 المصدر: ${ref}`;
         
         window.open(`https://wa.me/9647823906644?text=${msg}`, '_blank');
     }
