@@ -1,25 +1,32 @@
 <!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title id="st">مطعم الباهر</title><style>
-:root{--main-bg:#f4f4f4;--card-bg:#fff;--primary:#d32f2f;--secondary:#2c3e50;--accent:#e67e22}
-body{font-family:Arial;background:var(--main-bg);margin:0;padding:10px 10px 90px 10px;text-align:center}
-.container{max-width:480px;background:var(--card-bg);margin:auto;padding:15px;border-radius:25px;box-shadow:0 5px 25px rgba(0,0,0,.1)}
+:root{--main-bg:#f4f4f4;--card-bg:#fff;--primary:#d32f2f;--secondary:#2c3e50;--accent:#e67e22;--text:#333}
+.dark-mode{--main-bg:#1a1a1a;--card-bg:#2d2d2d;--text:#eee;--secondary:#ecf0f1}
+body{font-family:Arial;background:var(--main-bg);color:var(--text);margin:0;padding:10px 10px 90px 10px;transition:0.3s}
+.container{max-width:480px;background:var(--card-bg);margin:auto;padding:15px;border-radius:25px;box-shadow:0 5px 25px rgba(0,0,0,0.1)}
 #logo{width:110px;height:110px;border-radius:50%;border:4px solid var(--primary);object-fit:cover;margin-bottom:10px}
 .msg-box{background:#28a745;color:#fff;padding:12px;border-radius:15px;margin:10px 0;font-weight:bold;font-size:15px}
+.search-bar{width:100%;padding:12px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;box-sizing:border-box}
 .parent-btn{background:var(--secondary);color:#fff;padding:15px;margin-top:12px;border-radius:12px;cursor:pointer;font-weight:bold;display:flex;justify-content:space-between}
-.child-btn{background:#ecf0f1;color:var(--secondary);padding:12px;margin:5px 10px;border-radius:10px;cursor:pointer;font-weight:bold;text-align:right;border:1px solid #ccc}
+.child-btn{background:#ecf0f1;color:#2c3e50;padding:12px;margin:5px 10px;border-radius:10px;cursor:pointer;font-weight:bold;text-align:right;border:1px solid #ccc}
 .items-list{display:none;padding:5px 15px}
 .item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #eee}
 .btn-q{background:var(--accent);color:#fff;border:none;width:35px;height:35px;border-radius:8px;font-weight:bold;font-size:20px;cursor:pointer}
-.fixed-nav{position:fixed;bottom:0;left:0;width:100%;background:#fff;display:flex;padding:12px;box-shadow:0 -4px 15px rgba(0,0,0,0.1);gap:10px;z-index:1000}
-.nav-btn{flex:1;padding:14px;border-radius:12px;text-decoration:none;font-weight:bold;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;border:none;font-size:14px}
-.cart{background:#fff3cd;padding:15px;border-radius:15px;margin-top:20px;text-align:right;border:2px dashed #ffc107}
+.fixed-nav{position:fixed;bottom:0;left:0;width:100%;background:var(--card-bg);display:flex;padding:12px;box-shadow:0 -4px 15px rgba(0,0,0,0.1);gap:10px;z-index:1000}
+.nav-btn{flex:1;padding:14px;border-radius:12px;text-decoration:none;font-weight:bold;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;border:none}
+.cart{background:#fff3cd;color:#333;padding:15px;border-radius:15px;margin-top:20px;text-align:right;border:2px dashed #ffc107}
 .btn-ord{background:#25d366;color:#fff;width:100%;padding:18px;font-size:20px;font-weight:bold;border:none;border-radius:15px;margin-top:20px;cursor:pointer}
 input,textarea{width:100%;padding:14px;margin-top:10px;border-radius:12px;border:1px solid #ccc;box-sizing:border-box}
-</style></head><body><div class="container">
+#toTop{position:fixed;bottom:90px;right:20px;background:var(--primary);color:#fff;width:40px;height:40px;border-radius:50%;border:none;display:none;z-index:999}
+</style></head><body>
+<button id="toTop" onclick="window.scrollTo(0,0)">↑</button>
+<div class="container">
+<div style="text-align:left"><button onclick="document.body.classList.toggle('dark-mode')" style="background:none;border:none;font-size:20px;cursor:pointer">🌓</button></div>
 <img id="logo" src="https://cdn-icons-png.flaticon.com/512/3170/3170733.png">
-<h1 id="title">مطعم الباهر</h1><div id="msg" class="msg-box">أهلاً بكم وحياكم الله</div>
+<h1 id="title">مطعم الباهر</h1><div id="msg" class="msg-box">أهلاً بكم</div>
+<input type="text" class="search-bar" id="search" placeholder="🔍 ابحث عن أكلة..." onkeyup="search()">
 <div id="menu-area">⏳ جاري التحميل...</div>
 <div class="cart"><strong>🛒 طلباتك:</strong><div id="c-list"></div><hr><b>الإجمالي: <span id="tot">0</span> د.ع</b><div id="pts-msg" style="color:var(--accent);font-size:13px;margin-top:5px;font-weight:bold"></div></div>
-<input type="text" id="un" placeholder="👤 اسمك الكريم"><input type="tel" id="up" placeholder="📱 رقم الهاتف"><textarea id="ua" placeholder="🏠 العنوان بالتفصيل"></textarea><button class="btn-ord" onclick="send()">إرسال الطلب ✅</button></div>
+<input type="text" id="un" placeholder="👤 اسمك"><input type="tel" id="up" placeholder="📱 رقمك"><textarea id="ua" placeholder="🏠 عنوانك"></textarea><button class="btn-ord" onclick="send()">طلب عبر واتساب ✅</button></div>
 <div class="fixed-nav">
     <a href="tel:07830834849" class="nav-btn" style="background:#007bff">📞 اتصل</a>
     <a id="nav-map" href="#" target="_blank" class="nav-btn" style="background:#dc3545">📍 الموقع</a>
@@ -29,11 +36,12 @@ input,textarea{width:100%;padding:14px;margin-top:10px;border-radius:12px;border
 const DB="https://albaher-1ec78-default-rtdb.firebaseio.com/";
 let c={},sub=0;
 function toggle(id){let e=document.getElementById(id);e.style.display=(e.style.display==='block')?'none':'block'}
+window.onscroll=function(){document.getElementById('toTop').style.display=window.scrollY>300?'block':'none'}
+function search(){let v=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.item').forEach(i=>{i.style.display=i.innerText.toLowerCase().includes(v)?'flex':'none'})}
 async function u(n,p,ch,id,dbId){
     if(!c[n])c[n]={q:0,p:p};c[n].q+=ch;
     if(c[n].q<=0){delete c[n];document.getElementById(id).innerText="0"}else{document.getElementById(id).innerText=c[n].q}
-    rc();
-    if(ch>0) fetch(`${DB}items/${dbId}/clicks.json`).then(r=>r.json()).then(v=>fetch(`${DB}items/${dbId}/clicks.json`,{method:'PUT',body:(v||0)+1}));
+    rc(); if(ch>0) fetch(`${DB}items/${dbId}/clicks.json`).then(r=>r.json()).then(v=>fetch(`${DB}items/${dbId}/clicks.json`,{method:'PUT',body:(v||0)+1}));
 }
 function rc(){const d=document.getElementById('c-list');d.innerHTML="";sub=0;for(let n in c){sub+=(c[n].q*c[n].p);d.innerHTML+=`<div>${n} x${c[n].q}</div>`}document.getElementById('tot').innerText=sub.toLocaleString();
 let pts=Math.floor(sub/10000);document.getElementById('pts-msg').innerText=pts>0?`🌟 نقاطك: ${pts}`:'';}
@@ -44,6 +52,6 @@ async function load(){
     if(s){document.getElementById('title').innerText=s.name;document.getElementById('logo').src=s.logo||document.getElementById('logo').src;document.getElementById('msg').innerText=s.msg;if(s.map)document.getElementById('nav-map').href=s.map;if(s.p_col)document.documentElement.style.setProperty('--primary',s.p_col);if(s.s_col)document.documentElement.style.setProperty('--secondary',s.s_col);}
     const resI=await fetch(DB+"items.json");const data=await resI.json();
     let struct={};for(let id in data){let it=data[id];if(!it.stock)continue;let parts=it.cat.split('-');let p=parts[0].trim(), ch=parts.length>1?parts[1].trim():'قائمة';if(!struct[p])struct[p]={};if(!struct[p][ch])struct[p][ch]=[];struct[p][ch].push({...it,id})}
-    let h='',pi=0;for(let p in struct){pi++;h+=`<div class="parent-btn" onclick="toggle('p${pi}')">${p} <span>▼</span></div><div id="p${pi}" style="display:none">`;let ci=0;for(let ch in struct[p]){ci++;h+=`<div class="child-btn" onclick="toggle('p${pi}c${ci}')">${ch} ⬇️</div><div id="p${pi}c${ci}" class="items-list">`;struct[p][ch].forEach((x,ii)=>{let qId=`q${pi}${ci}${ii}`;h+=`<div class="item"><span>${x.name}<br><small>${x.price.toLocaleString()}</small></span><div class="ctrl"><button class="btn-q" onclick="u('${x.name}',${x.price},1,'${qId}','${x.id}')">+</button><span id="${qId}" style="margin:0 10px;font-weight:bold">0</span><button class="btn-q" onclick="u('${x.name}',${x.price},-1,'${qId}','${x.id}')">-</button></div></div>`});h+=`</div>`}h+=`</div>`}document.getElementById('menu-area').innerHTML=h;
+    let h='',pi=0;for(let p in struct){pi++;h+=`<div class="parent-btn" onclick="toggle('p${pi}')">${p} <span>▼</span></div><div id="p${pi}" style="display:none">`;let ci=0;for(let ch in struct[p]){ci++;h+=`<div class="child-btn" onclick="toggle('p${pi}c${ci}')">${ch} ⬇️</div><div id="p${pi}c${ci}" class="items-list" style="display:block">`;struct[p][ch].forEach((x,ii)=>{let qId=`q${pi}${ci}${ii}`;h+=`<div class="item"><span>${x.name}<br><small>${x.price.toLocaleString()}</small></span><div class="ctrl"><button class="btn-q" onclick="u('${x.name}',${x.price},1,'${qId}','${x.id}')">+</button><span id="${qId}" style="margin:0 10px;font-weight:bold">0</span><button class="btn-q" onclick="u('${x.name}',${x.price},-1,'${qId}','${x.id}')">-</button></div></div>`});h+=`</div>`}h+=`</div>`}document.getElementById('menu-area').innerHTML=h;
 }load();
 </script></body></html>
