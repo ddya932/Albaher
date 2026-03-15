@@ -5,7 +5,8 @@ body{font-family:Arial;padding:10px;background:#f0f2f5;text-align:center}.box{ma
 input,textarea,button{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:1px solid #ccc;box-sizing:border-box}
 .btn-save{background:#28a745;color:#fff;font-weight:bold;border:none;cursor:pointer}
 .item-row{background:#f9f9f9;padding:15px;margin-top:10px;border-radius:12px;border-right:5px solid #d32f2f;text-align:right}
-.actions{display:flex;gap:5px;margin-top:10px} .btn-del{background:#ff4d4d;color:#fff;border:none;padding:8px;border-radius:5px;flex:1} .btn-off{background:#666;color:#fff;border:none;padding:8px;border-radius:5px;flex:1}
+.actions{display:flex;gap:4px;margin-top:10px;flex-wrap:wrap} .actions button{flex:1;padding:8px;border-radius:5px;border:none;color:#fff;cursor:pointer;font-size:12px}
+.btn-del{background:#ff4d4d} .btn-off{background:#666} .btn-edit{background:#007bff}
 </style></head><body><div class="box">
     <h2>👑 مركز إدارة الباهر</h2>
     <div class="tabs"><button id="t1" class="active" onclick="tab(1)">الأصناف</button><button id="t2" onclick="tab(2)">الواجهة</button></div>
@@ -13,7 +14,7 @@ input,textarea,button{width:100%;padding:12px;margin-top:10px;border-radius:8px;
         <input type="text" id="cat" placeholder="القسم (مشويات - كباب)">
         <input type="text" id="name" placeholder="اسم الأكلة">
         <input type="number" id="price" placeholder="السعر">
-        <input type="text" id="img" placeholder="رابط صورة الأكلة (اختياري)">
+        <input type="text" id="img" placeholder="رابط الصورة (اختياري)">
         <button class="btn-save" onclick="add()">➕ إضافة للمنيو</button><hr>
         <div id="list">جاري التحميل...</div>
     </div>
@@ -30,10 +31,11 @@ const DB="https://albaher-1ec78-default-rtdb.firebaseio.com/";
 function tab(n){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));document.getElementById('p'+n).classList.add('show');document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));document.getElementById('t'+n).classList.add('active');}
 async function add(){const cat=document.getElementById('cat').value,name=document.getElementById('name').value,price=document.getElementById('price').value,img=document.getElementById('img').value;if(!cat||!name||!price)return alert("املأ الحقول!");await fetch(DB+"items.json",{method:'POST',body:JSON.stringify({cat,name,price:parseInt(price),img,stock:true})});location.reload();}
 async function del(id){if(confirm("حذف؟")){await fetch(`${DB}items/${id}.json`,{method:'DELETE'});location.reload()}}
-async function toggleStock(id,current){await fetch(`${DB}items/${id}/stock.json`,{method:'PUT',body:!current});location.reload();}
+async function editP(id,oldP){let n=prompt("السعر الجديد:",oldP);if(n){await fetch(`${DB}items/${id}/price.json`,{method:'PUT',body:parseInt(n)});location.reload()}}
+async function toggleS(id,cur){await fetch(`${DB}items/${id}/stock.json`,{method:'PUT',body:!cur});location.reload();}
 async function saveSet(){const name=document.getElementById('r_name').value,logo=document.getElementById('r_logo').value,map=document.getElementById('r_map').value,msg=document.getElementById('r_msg').value;await fetch(DB+"settings.json",{method:'PUT',body:JSON.stringify({name,logo,map,msg})});alert("تم الحفظ ✅");}
 async function load(){
-    const resI=await fetch(DB+"items.json");const items=await resI.json();let h='';for(let id in items){let it=items[id];h+=`<div class="item-row"><b>${it.cat} > ${it.name}</b><div class="actions"><button class="btn-off" onclick="toggleStock('${id}',${it.stock})">${it.stock?'متوفر':'خلصان'}</button><button class="btn-del" onclick="del('${id}')">حذف</button></div></div>`}document.getElementById('list').innerHTML=h||'لا يوجد';
+    const resI=await fetch(DB+"items.json");const items=await resI.json();let h='';for(let id in items){let it=items[id];h+=`<div class="item-row"><b>${it.cat} > ${it.name}</b> (${it.price})<div class="actions"><button class="btn-edit" onclick="editP('${id}',${it.price})">تعديل السعر</button><button class="btn-off" onclick="toggleS('${id}',${it.stock})">${it.stock?'متوفر':'خلصان'}</button><button class="btn-del" onclick="del('${id}')">حذف</button></div></div>`}document.getElementById('list').innerHTML=h||'لا يوجد';
     const resS=await fetch(DB+"settings.json");const s=await resS.json();if(s){document.getElementById('r_name').value=s.name||'';document.getElementById('r_logo').value=s.logo||'';document.getElementById('r_map').value=s.map||'';document.getElementById('r_msg').value=s.msg||'';}
 }load();
 </script></body></html>
