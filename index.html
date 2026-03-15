@@ -1,104 +1,71 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title id="st">مطعم الباهر - النسخة الأسطورية</title>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>مطعم الباهر - النسخة الملكية</title>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
-:root{--p:#d32f2f;--s:#2c3e50;--a:#e67e22;--bg:#f4f4f4}
-body{font-family:Arial;background:var(--bg);margin:0;padding:10px 10px 120px 10px;text-align:center;transition:0.3s;user-select:none;-webkit-tap-highlight-color:transparent}
-.container{max-width:480px;background:#fff;margin:auto;padding:15px;border-radius:30px;box-shadow:0 8px 30px rgba(0,0,0,0.15);position:relative}
-#logo{width:115px;height:115px;border-radius:50%;border:4px solid var(--p);object-fit:cover;margin-bottom:10px;animation:glow 3s infinite alternate}
-@keyframes glow{from{box-shadow:0 0 5px var(--p)}to{box-shadow:0 0 25px var(--p)}}
-.msg{background:#28a745;color:#fff;padding:12px;border-radius:15px;margin:10px 0;font-weight:bold;font-size:14px;box-shadow:0 4px 10px rgba(40,167,69,0.3)}
-.parent-btn{background:var(--s);color:#fff;padding:16px;margin-top:10px;border-radius:15px;cursor:pointer;font-weight:bold;display:flex;justify-content:space-between}
-.child-btn{background:#f8f9fa;color:#333;padding:13px;margin:6px 10px;border-radius:12px;cursor:pointer;font-weight:bold;text-align:right;border:1px solid #eee}
-.item{display:flex;justify-content:space-between;align-items:center;padding:12px 10px;border-bottom:1px solid #f1f1f1}
-.item img{width:65px;height:65px;border-radius:12px;margin-left:10px;object-fit:cover;cursor:zoom-in;transition:0.3s}
-.item img:hover{transform:scale(1.1)}
+:root{--p:#d32f2f;--s:#2c3e50;--a:#e67e22;--bg:#f8f9fa}
+body{font-family:Arial,sans-serif;background:var(--bg);margin:0;padding:10px 10px 120px 10px;text-align:center;direction:rtl}
+.container{max-width:500px;background:#fff;margin:auto;padding:20px;border-radius:35px;box-shadow:0 10px 40px rgba(0,0,0,0.1)}
+#logo{width:120px;height:120px;border-radius:50%;border:4px solid var(--p);object-fit:cover;margin-bottom:15px;animation:float 3s infinite}
+@keyframes float{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.msg-box{background:#28a745;color:#fff;padding:15px;border-radius:20px;margin:15px 0;font-weight:bold;font-size:15px}
+.parent-btn{background:var(--s);color:#fff;padding:18px;margin-top:15px;border-radius:18px;cursor:pointer;font-weight:bold;display:flex;justify-content:space-between}
+.child-btn{background:#f1f3f5;color:var(--s);padding:14px;margin:8px 10px;border-radius:15px;cursor:pointer;font-weight:bold;text-align:right;border:1px solid #dee2e6}
+.item{display:flex;justify-content:space-between;align-items:center;padding:15px 10px;border-bottom:1px solid #eee}
 .btn-q{background:var(--a);color:#fff;border:none;width:42px;height:42px;border-radius:12px;font-size:24px;cursor:pointer;font-weight:bold}
-.cart{background:#fff3cd;padding:18px;border-radius:20px;margin-top:20px;text-align:right;border:2px dashed #ffc107}
-.floating-total{position:fixed;top:25px;left:20px;background:var(--p);color:#fff;padding:12px 22px;border-radius:30px;font-weight:bold;box-shadow:0 6px 15px rgba(211,47,47,0.4);z-index:9999;display:none}
-input,textarea,select{width:100%;padding:15px;margin-top:10px;border-radius:15px;border:1px solid #ccc;box-sizing:border-box;font-size:16px}
-.nav-btn{flex:1;padding:15px;border-radius:15px;color:#fff;text-decoration:none;font-weight:bold;font-size:14px;text-align:center}
-#img-modal{display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);justify-content:center;align-items:center}
-#img-modal img{max-width:90%;max-height:80%;border-radius:15px;border:5px solid #fff}
-.live-badge{position:fixed;bottom:90px;left:20px;background:rgba(0,0,0,0.7);color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;z-index:999;animation:fadeIn 1s}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.cart{background:#fff3cd;padding:20px;border-radius:25px;margin-top:25px;text-align:right;border:2px dashed #ffc107}
+.fixed-nav{position:fixed;bottom:0;left:0;width:100%;background:#fff;display:flex;padding:15px;box-shadow:0 -5px 20px rgba(0,0,0,0.1);gap:12px;z-index:1000}
+.nav-btn{flex:1;padding:16px;border-radius:18px;color:#fff;text-decoration:none;font-weight:bold;font-size:15px;text-align:center}
+input,textarea,select{width:100%;padding:16px;margin-top:12px;border-radius:15px;border:1px solid #ccc;box-sizing:border-box;font-size:16px}
 </style></head><body>
-<div id="img-modal" onclick="this.style.display='none'"><img id="modal-img"></div>
-<div class="live-badge" id="live-users">⚡ هناك ٤ أشخاص يطلبون الآن..</div>
-<div class="floating-total" id="float-tot">🛒 0 د.ع</div>
 <div class="container">
     <div id="tab-box" style="background:#e7f3ff;padding:12px;border-radius:15px;display:none;margin-bottom:12px;color:#004085;font-weight:bold">📍 طاولة رقم: <span id="tab-num"></span></div>
     <img id="logo" src="https://cdn-icons-png.flaticon.com/512/3170/3170733.png">
     <h1 id="title">مطعم الباهر</h1>
-    <div id="msg" class="msg">أهلاً بك.. وجبتك المفضلة يتم تحضيرها الآن</div>
-    <input type="text" id="search" placeholder="🔍 ابحث عن أكلة (كباب، دجاج، قوزي...)" onkeyup="doSearch()">
-    <div id="menu-area">⏳ جاري تحميل المنيو الملكي...</div>
-    <div class="cart" id="main-cart">
-        <div id="eta-box" style="color:var(--p); font-weight:bold; margin-bottom:10px">⏳ وقت التجهيز المتوقع: <span id="eta-time">...</span></div>
-        <strong>🛒 سلة طلباتك:</strong><div id="c-list"></div><hr>
-        <div id="del-price-box" style="display:none;font-size:14px;margin-bottom:5px">التوصيل: <span id="del-val">0</span> د.ع</div>
-        <b style="font-size:19px">الإجمالي: <span id="tot">0</span> د.ع</b>
+    <div id="msg" class="msg-box">أهلاً بكم في مطعم الباهر.. نتشرف بطلباتكم</div>
+    <input type="text" id="search" placeholder="🔍 ابحث عن أكلة..." onkeyup="doSearch()">
+    <div id="menu-area">⏳ جاري التحميل...</div>
+    <div class="cart">
+        <div id="eta-box" style="color:var(--p);font-weight:bold;margin-bottom:10px">⏳ وقت التجهيز: <span id="eta-time">...</span></div>
+        <strong>🛒 سلة الطلبات:</strong><div id="c-list"></div><hr>
+        <b>الإجمالي: <span id="tot">0</span> د.ع</b>
     </div>
     <div id="order-form">
         <input type="text" id="un" placeholder="👤 اسمك الكريم"><input type="tel" id="up" placeholder="📱 رقم الهاتف">
-        <select id="del-type" onchange="rc()"><option value="0">🏠 استلام من المطعم</option><option value="1000">🛵 داخل النصر (1,000)</option><option value="3000">🚗 الأطراف والقرى (3,000)</option></select>
+        <select id="del-type" onchange="rc()"><option value="0">🏠 استلام من المطعم</option><option value="1000">🛵 داخل النصر (1,000)</option><option value="3000">🚗 الأطراف (3,000)</option></select>
         <textarea id="ua" placeholder="🏠 العنوان بالتفصيل"></textarea>
-        <textarea id="notes" placeholder="📝 ملاحظات خاصة (مثلاً: بدون بصل، ملح قليل...)"></textarea>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px">
-            <button onclick="send('wa')" style="background:#25d366;padding:18px;border-radius:18px;border:none;color:#fff;font-weight:bold;cursor:pointer;font-size:16px">💬 واتساب</button>
-            <button onclick="send('call')" style="background:#007bff;padding:18px;border-radius:18px;border:none;color:#fff;font-weight:bold;cursor:pointer;font-size:16px">📞 اتصال</button>
+            <button onclick="send('wa')" style="background:#25d366;padding:18px;border-radius:18px;border:none;color:#fff;font-weight:bold">💬 واتساب</button>
+            <button onclick="send('call')" style="background:#007bff;padding:18px;border-radius:18px;border:none;color:#fff;font-weight:bold">📞 اتصال</button>
         </div>
     </div>
 </div>
-<div style="position:fixed;bottom:0;left:0;width:100%;background:#fff;display:flex;padding:12px;box-shadow:0 -4px 15px rgba(0,0,0,0.1);gap:10px;z-index:1000">
-    <a href="tel:07830834849" class="nav-btn" style="background:#d32f2f">☎️ اطلب الآن</a>
-    <a id="nav-map" href="#" target="_blank" class="nav-btn" style="background:#007bff">📍 الموقع</a>
-    <button onclick="shareLink()" class="nav-btn" style="background:#6c757d">📤 مشاركة</button>
-</div>
+<div class="fixed-nav"><a href="tel:07830834849" class="nav-btn" style="background:#d32f2f">☎️ اطلب الآن</a><a id="nav-map" href="#" target="_blank" class="nav-btn" style="background:#007bff">📍 الموقع</a></div>
 <script>
 const DB="https://albaher-1ec78-default-rtdb.firebaseio.com/";
-let c={},sub=0, tableNo = new URLSearchParams(window.location.search).get('t');
-
+let c={},sub=0, tableNo=new URLSearchParams(window.location.search).get('t'), ref=new URLSearchParams(window.location.search).get('ref')||'مباشر';
 if(tableNo){document.getElementById('tab-box').style.display='block';document.getElementById('tab-num').innerText=tableNo;document.getElementById('ua').style.display='none';document.getElementById('del-type').style.display='none';}
-
-// ترحيب ذكي وحركة اليوزرز
-const hr = new Date().getHours();
-document.getElementById('msg').innerText = (hr < 12 ? "صباح الخير والبركة" : "مساء العافية والسرور") + " في مطعم الباهر";
-setTimeout(()=>document.getElementById('live-users').style.display='none', 8000);
-
-function showImg(src){document.getElementById('modal-img').src=src; document.getElementById('img-modal').style.display='flex';}
 function toggle(id){let e=document.getElementById(id);e.style.display=(e.style.display==='block')?'none':'block'}
 function doSearch(){let v=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.item').forEach(i=>{i.style.display=i.innerText.toLowerCase().includes(v)?'flex':'none'});}
 function u(n,p,ch,id,dbId){
-    if(navigator.vibrate) navigator.vibrate(15);
     if(!c[n])c[n]={q:0,p:p};c[n].q+=ch;
     if(c[n].q<=0){delete c[n];document.getElementById(id).innerText="0"}else{document.getElementById(id).innerText=c[n].q}
     rc(); if(ch>0 && dbId) fetch(`${DB}items/${dbId}/clicks.json`).then(r=>r.json()).then(v=>fetch(`${DB}items/${dbId}/clicks.json`,{method:'PUT',body:(v||0)+1}));
 }
-function rc(){
-    const d=document.getElementById('c-list');d.innerHTML="";sub=0;for(let n in c){sub+=(c[n].q*c[n].p);d.innerHTML+=`<div>• ${n} x${c[n].q}</div>`}
-    let delVal = tableNo ? 0 : (parseInt(document.getElementById('del-type').value) || 0);
-    let total = sub + delVal;
-    document.getElementById('tot').innerText=total.toLocaleString();
-    document.getElementById('float-tot').innerText=`🛒 ${total.toLocaleString()} د.ع`;
-    document.getElementById('float-tot').style.display = total > 0 ? 'block' : 'none';
-    document.getElementById('del-val').innerText = delVal.toLocaleString();
-    document.getElementById('del-price-box').style.display = delVal > 0 ? 'block' : 'none';
-}
-function send(type){
-    const n=document.getElementById('un').value,p=document.getElementById('up').value,a=document.getElementById('ua').value,not=document.getElementById('notes').value;
-    if(sub===0) return alert("السلة فارغة! اختر وجباتك أولاً"); if(!n||!p) return alert("لطفاً، املأ الاسم ورقم الهاتف");
-    confetti({particleCount:150, spread:70, origin:{y:0.6}});
+function rc(){const d=document.getElementById('c-list');d.innerHTML="";sub=0;for(let n in c){sub+=(c[n].q*c[n].p);d.innerHTML+=`<div>• ${n} x${c[n].q}</div>`}
+let dv=tableNo?0:parseInt(document.getElementById('del-type').value);document.getElementById('tot').innerText=(sub+dv).toLocaleString();}
+function send(t){
+    const n=document.getElementById('un').value,p=document.getElementById('up').value,a=document.getElementById('ua').value;
+    if(sub===0||!n||!p)return alert("اكمل البيانات!");
+    confetti({particleCount:150,spread:70,origin:{y:0.6}});
     let o="";for(let k in c){o+=`• ${k} (x${c[k].q})%0A`}
-    let m=`*طلب جديد من الباهر*%0A👤 الاسم: ${n}%0A📱 الهاتف: ${p}${tableNo?` %0A📍طاولة: ${tableNo}`:`%0A🏠 العنوان: ${a}%0A🚚التوصيل: ${document.getElementById('del-type').options[document.getElementById('del-type').selectedIndex].text}`}%0A📝ملاحظات: ${not}%0A🍴الطلبات:%0A${o}💰المجموع: ${document.getElementById('tot').innerText} د.ع`;
-    setTimeout(()=>{ if(type==='wa'){window.open(`https://wa.me/9647830834849?text=${m}`,'_blank');}else{window.location.href="tel:07830834849";} }, 1000);
+    let m=`*طلب جديد - الباهر*%0A👤:${n}%0A📱:${p}${tableNo?`%0A📍طاولة:${tableNo}`:`%0A🏠:${a}`}%0A🍴:${o}💰:${document.getElementById('tot').innerText} د.ع%0A📢المصدر:${ref}`;
+    setTimeout(()=>{if(t==='wa'){window.open(`https://wa.me/9647830834849?text=${m}`,'_blank');}else{window.location.href="tel:07830834849"}},1000);
 }
-function shareLink(){const u=window.location.href;if(navigator.share){navigator.share({title:'مطعم الباهر',url:u});}else{navigator.clipboard.writeText(u);alert("تم نسخ الرابط ✅")}}
 async function load(){
-    const resS=await fetch(DB+"settings.json"); const s=await resS.json();
+    const resS=await fetch(DB+"settings.json");const s=await resS.json();
     if(s){document.getElementById('title').innerText=s.name;if(s.time)document.getElementById('eta-time').innerText=s.time;if(s.map)document.getElementById('nav-map').href=s.map;}
-    const resI=await fetch(DB+"items.json"); const data=await resI.json();
-    let struct={};for(let id in data){let it=data[id];if(!it.stock&&it.stock!==undefined)continue;let parts=it.cat.split('-');let p=parts[0].trim(),ch=parts.length>1?parts[1].trim():'عام';if(!struct[p])struct[p]={};if(!struct[p][ch])struct[p][ch]=[];struct[p][ch].push({...it,id})}
-    let h='',pi=0;for(let p in struct){pi++;h+=`<div class="parent-btn" onclick="toggle('p${pi}')">${p} <span>▼</span></div><div id="p${pi}" style="display:none">`;let ci=0;for(let ch in struct[p]){ci++;h+=`<div class="child-btn" onclick="toggle('p${pi}c${ci}')">${ch} ⬇️</div><div id="p${pi}c${ci}" style="display:block">`;struct[p][ch].forEach((x,ii)=>{let qId=`q${pi}${ci}${ii}`;h+=`<div class="item"><span>${x.img?`<img src="${x.img}" onclick="showImg('${x.img}')">`:''}${x.name} ${(x.clicks>20?'<small style="color:#ff4500;font-weight:bold">🔥 مطلوب</small>':'')}<br><small>${x.price.toLocaleString()} د.ع</small></span><div class="ctrl"><button class="btn-q" onclick="u('${x.name}',${x.price},1,'${qId}','${x.id}')">+</button><span id="${qId}" style="margin:0 10px;font-weight:bold">0</span><button class="btn-q" onclick="u('${x.name}',${x.price},-1,'${qId}')">-</button></div></div>`});h+=`</div>`}h+=`</div>`}
+    const resI=await fetch(DB+"items.json");const data=await resI.json();
+    let struct={};for(let id in data){let it=data[id];if(!it.stock&&it.stock!==undefined)continue;let parts=it.cat.split('-');let p=parts[0].trim(),ch=parts.length>1?parts[1].trim():'أخرى';if(!struct[p])struct[p]={};if(!struct[p][ch])struct[p][ch]=[];struct[p][ch].push({...it,id})}
+    let h='',pi=0;for(let p in struct){pi++;h+=`<div class="parent-btn" onclick="toggle('p${pi}')">${p} <span>▼</span></div><div id="p${pi}" style="display:none">`;for(let ch in struct[p]){let ci=Math.random().toString(36).substring(7);h+=`<div class="child-btn" onclick="toggle('${ci}')">${ch} ⬇️</div><div id="${ci}" style="display:block">`;struct[p][ch].forEach((x,ii)=>{let qId=Math.random().toString(36).substring(7);h+=`<div class="item"><span>${x.name} ${(x.clicks>20?'🔥':'')}<br><small>${x.price.toLocaleString()} د.ع</small></span><div class="ctrl"><button class="btn-q" onclick="u('${x.name}',${x.price},1,'${qId}','${x.id}')">+</button><span id="${qId}" style="margin:0 12px;font-weight:bold">0</span><button class="btn-q" onclick="u('${x.name}',${x.price},-1,'${qId}')">-</button></div></div>`});h+=`</div>`}h+=`</div>`}
     document.getElementById('menu-area').innerHTML=h;
 }load();
 </script></body></html>
