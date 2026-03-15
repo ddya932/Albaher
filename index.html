@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>منيو مطعم الباهر - النسخة الاحترافية</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>منيو مطعم الباهر - VIP</title>
 <style>
 body{font-family:'Arial',sans-serif;background:#f0f2f5;margin:0;padding:10px;text-align:center;}
 .container{max-width:480px;background:#fff;margin:auto;padding:15px;border-radius:20px;box-shadow:0 5px 20px rgba(0,0,0,0.1);}
-h1{color:#d32f2f;margin-bottom:5px;}
+.logo-img{width:110px;height:110px;border-radius:50%;border:3px solid #d32f2f;margin-bottom:5px;object-fit:cover;}
+h1{color:#d32f2f;margin-top:5px;margin-bottom:5px;}
 .sec-head{background:#2c3e50;color:#fff;padding:15px;margin-top:10px;border-radius:10px;cursor:pointer;display:flex;justify-content:space-between;font-weight:bold;font-size:18px;}
 .list{display:none;padding:5px;border:1px solid #ddd;border-top:none;border-radius:0 0 10px 10px;margin-bottom:10px;}
 .item{display:flex;justify-content:space-between;align-items:center;padding:15px 10px;border-bottom:1px solid #eee;}
@@ -16,12 +17,16 @@ h1{color:#d32f2f;margin-bottom:5px;}
 .cart{background:#fff3cd;border:2px dashed #ffc107;border-radius:15px;padding:15px;margin-top:25px;text-align:right;}
 .c-item{display:flex;justify-content:space-between;background:#fff;padding:10px;margin-bottom:8px;border-radius:8px;}
 .btn-d{background:#ff4d4d;color:#fff;border:none;padding:5px 10px;border-radius:5px;}
-input,textarea{width:100%;padding:12px;margin-top:10px;border-radius:10px;border:1px solid #ccc;box-sizing:border-box;font-size:16px;}
-.btn-ord{background:#25d366;color:#fff;width:100%;padding:18px;font-size:20px;font-weight:bold;border:none;border-radius:15px;margin-top:20px;cursor:pointer;}
+input,textarea,select{width:100%;padding:12px;margin-top:10px;border-radius:10px;border:1px solid #ccc;box-sizing:border-box;font-size:16px;font-family:inherit;}
+.btn-ord{background:#25d366;color:#fff;width:100%;padding:18px;font-size:20px;font-weight:bold;border:none;border-radius:15px;margin-top:20px;cursor:pointer;box-shadow:0 4px 10px rgba(37,211,102,0.3);}
+.social{margin-top:20px;display:flex;justify-content:center;gap:15px;}
+.social a{text-decoration:none;background:#eee;padding:10px 15px;border-radius:10px;color:#333;font-weight:bold;font-size:14px;}
+.sum-txt{font-size:16px;color:#555;margin-top:5px;}
 </style>
 </head>
 <body>
 <div class="container">
+<img src="https://cdn-icons-png.flaticon.com/512/3170/3170733.png" alt="لوكو المطعم" class="logo-img">
 <h1>🔥 مطعم الباهر 🔥</h1>
 <p>أهلاً بك! اختر وجباتك المفضلة</p>
 
@@ -40,4 +45,92 @@ input,textarea{width:100%;padding:12px;margin-top:10px;border-radius:10px;border
     <div class="item"><div><strong>برياني لحم</strong><br><small>3,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('برياني لحم',3000,1,'q7')">+</button><span class="q-num" id="q7">0</span><button class="btn-q" onclick="u('برياني لحم',3000,-1,'q7')">-</button></div></div>
     <div class="item"><div><strong>برياني دجاج</strong><br><small>2,500 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('برياني دجاج',2500,1,'q8')">+</button><span class="q-num" id="q8">0</span><button class="btn-q" onclick="u('برياني دجاج',2500,-1,'q8')">-</button></div></div>
     <div class="item"><div><strong>تمن مندي</strong><br><small>3,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('تمن مندي',3000,1,'q9')">+</button><span class="q-num" id="q9">0</span><button class="btn-q" onclick="u('تمن مندي',3000,-1,'q9')">-</button></div></div>
-    <div class="item"><div><strong>تمن بدون زيت</strong><br><small>2,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('تمن بدون زيت',2000,1
+    <div class="item"><div><strong>تمن بدون زيت</strong><br><small>2,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('تمن بدون زيت',2000,1,'q10')">+</button><span class="q-num" id="q10">0</span><button class="btn-q" onclick="u('تمن بدون زيت',2000,-1,'q10')">-</button></div></div>
+</div>
+
+<div class="sec-head" onclick="t('s3')">🍗 الدجاج (الدجاجة) <span>▼</span></div>
+<div id="s3" class="list">
+    <div class="item"><div><strong>دجاج حي</strong><br><small>12,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('دجاج حي',12000,1,'q11')">+</button><span class="q-num" id="q11">0</span><button class="btn-q" onclick="u('دجاج حي',12000,-1,'q11')">-</button></div></div>
+    <div class="item"><div><strong>دجاج كفيل</strong><br><small>8,000 د.ع</small></div><div class="ctrl"><button class="btn-q" onclick="u('دجاج كفيل',8000,1,'q12')">+</button><span class="q-num" id="q12">0</span><button class="btn-q" onclick="u('دجاج كفيل',8000,-1,'q12')">-</button></div></div>
+</div>
+
+<div class="sec-head" onclick="t('s4')">🥗 المقبلات (الماعون) <span>▼</span></div>
+<div id="s4" class="list"><div style="padding:15px;color:#888;">سيتم إضافة الأصناف قريباً...</div></div>
+
+<div class="sec-head" onclick="t('s5')">🍔 الاكلات الغربية (النفر) <span>▼</span></div>
+<div id="s5" class="list"><div style="padding:15px;color:#888;">سيتم إضافة الأصناف قريباً...</div></div>
+
+<div class="cart">
+    <strong>🛒 سلة طلباتك:</strong>
+    <div id="c-disp" style="margin-top:10px;"></div><hr>
+    <div class="sum-txt">قيمة الطلب: <span id="sub-t">0</span> د.ع</div>
+    <div class="sum-txt">التوصيل: <span id="del-t">1,000</span> د.ع</div>
+    <div style="font-size:20px;font-weight:bold;color:#d32f2f;margin-top:8px;">الإجمالي الكلي: <span id="tot">0</span> د.ع</div>
+</div>
+
+<input type="text" id="un" placeholder="👤 اسمك الكريم">
+<input type="tel" id="up" placeholder="📱 رقم الهاتف">
+
+<select id="del-area" onchange="calc()">
+    <option value="1000">🛵 توصيل داخل النصر (1,000 د.ع)</option>
+    <option value="3000">🚗 توصيل القرى والأرياف (3,000 د.ع)</option>
+</select>
+
+<textarea id="ua" rows="2" placeholder="🏠 العنوان بالتفصيل (أقرب نقطة دالة)"></textarea>
+<textarea id="unotes" rows="2" placeholder="📝 ملاحظات الطلب (مثلاً: بدون بصل، استواء كامل...)"></textarea>
+
+<button class="btn-ord" onclick="send()">إرسال الطلب عبر واتساب ✅</button>
+
+<div class="social">
+    <a href="#">📘 تابعنا فيسبوك</a>
+    <a href="#">📸 تابعنا انستغرام</a>
+</div>
+</div>
+
+<script>
+let c={}; let sub=0;
+const r=new URLSearchParams(window.location.search).get('ref')||'مباشر';
+function t(id){let e=document.getElementById(id);e.style.display=(e.style.display==='block')?'none':'block';}
+function u(n,p,ch,id){
+    if(!c[n])c[n]={q:0,p:p,i:id};
+    c[n].q+=ch;
+    if(c[n].q<=0){delete c[n];document.getElementById(id).innerText="0";}
+    else{document.getElementById(id).innerText=c[n].q;}
+    rc();
+}
+function dItem(n){
+    let id=c[n].i;delete c[n];
+    if(document.getElementById(id))document.getElementById(id).innerText="0";
+    rc();
+}
+function rc(){
+    const d=document.getElementById('c-disp');d.innerHTML="";sub=0;
+    for(let n in c){
+        let s=c[n].q*c[n].p;sub+=s;
+        d.innerHTML+=`<div class="c-item"><span>${n} (x${c[n].q})</span><span>${s.toLocaleString()} <button class="btn-d" onclick="dItem('${n}')">حذف</button></span></div>`;
+    }
+    calc();
+}
+function calc(){
+    let del=parseInt(document.getElementById('del-area').value);
+    document.getElementById('sub-t').innerText=sub.toLocaleString();
+    document.getElementById('del-t').innerText=del.toLocaleString();
+    let total=sub>0?sub+del:0;
+    document.getElementById('tot').innerText=total.toLocaleString();
+}
+function send(){
+    const n=document.getElementById('un').value,p=document.getElementById('up').value,a=document.getElementById('ua').value;
+    const notes=document.getElementById('unotes').value||'لا توجد';
+    const dSel=document.getElementById('del-area');
+    const dTxt=dSel.options[dSel.selectedIndex].text;
+    let v=document.getElementById('tot').innerText;
+    
+    if(!n||!p||!a||sub===0){alert("الرجاء ملء البيانات واختيار الوجبات!");return;}
+    let o="";for(let k in c){o+=`• ${k} (العدد: ${c[k].q})%0A`;}
+    
+    let m=`*طلب جديد - مطعم الباهر*%0A👤 الاسم: ${n}%0A📱 الهاتف: ${p}%0A🏠 العنوان: ${a}%0A🚚 ${dTxt}%0A📝 ملاحظات: ${notes}%0A------------------%0A🍴 الطلبات:%0A${o}------------------%0A💰 الإجمالي الكلي: ${v} د.ع%0A📢 المصدر: ${r}`;
+    window.open(`https://wa.me/9647830834849?text=${m}`,'_blank');
+}
+</script>
+</body>
+</html>
