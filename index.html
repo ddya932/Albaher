@@ -2,104 +2,98 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منيو مطعم الباهر</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: 'Arial', sans-serif; background-color: #f0f2f5; margin: 0; padding: 10px; text-align: center; }
-        .container { max-width: 450px; background: white; margin: auto; padding: 15px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        h1 { color: #d32f2f; font-size: 28px; margin-bottom: 5px; }
-        .section-title { background: #34495e; color: white; padding: 12px; margin-top: 15px; border-radius: 10px; font-size: 18px; cursor: pointer; display: flex; justify-content: space-between; }
-        .items-list { display: block; padding: 5px; }
-        .item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
-        .add-btn { background: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; }
-        .cart-box { background: #fff3cd; border: 2px dashed #ffc107; border-radius: 15px; padding: 15px; margin-top: 20px; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; background: white; margin-bottom: 8px; padding: 8px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .del-btn { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
-        .total-price { font-size: 20px; color: #d32f2f; font-weight: bold; margin-top: 10px; }
-        .inputs input, .inputs textarea { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; }
-        .send-btn { background: #25d366; color: white; width: 100%; padding: 18px; font-size: 20px; font-weight: bold; border: none; border-radius: 12px; margin-top: 20px; cursor: pointer; }
+        body { font-family: sans-serif; background: #eee; padding: 10px; text-align: center; }
+        .card { background: white; padding: 15px; border-radius: 15px; max-width: 400px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { color: red; }
+        .section { background: #333; color: white; padding: 10px; margin-top: 15px; border-radius: 5px; font-weight: bold; }
+        .item { border-bottom: 1px solid #ddd; padding: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+        button.add { background: green; color: white; border: none; padding: 8px; border-radius: 5px; }
+        .cart { background: #fff3cd; padding: 10px; margin-top: 20px; border-radius: 10px; border: 2px solid #ffc107; }
+        .cart-item { background: white; margin-bottom: 5px; padding: 5px; display: flex; justify-content: space-between; align-items: center; border-radius: 5px; }
+        button.del { background: red; color: white; border: none; padding: 5px; border-radius: 3px; font-size: 12px; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .order-btn { background: #25d366; color: white; width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="card">
     <h1>🔥 مطعم الباهر 🔥</h1>
-    <p>اطلب وجبتك المفضلة الآن</p>
 
-    <div class="section-title" onclick="toggle('sec1')">قسم المشويات <span>▼</span></div>
-    <div id="sec1" class="items-list">
-        <div class="item">
-            <span>كباب دجاج (15,000 د.ع)</span>
-            <button class="add-btn" onclick="addItem('كباب دجاج', 15000)">إضافة +</button>
-        </div>
-        <div class="item">
-            <span>نصف دجاجة (7,000 د.ع)</span>
-            <button class="add-btn" onclick="addItem('نصف دجاجة', 7000)">إضافة +</button>
-        </div>
+    <div class="section">🍴 المشويات</div>
+    <div class="item">
+        <span>كباب دجاج (15,000)</span>
+        <button class="add" onclick="add('كباب دجاج', 15000)">إضافة +</button>
+    </div>
+    <div class="item">
+        <span>نصف دجاجة (7,000)</span>
+        <button class="add" onclick="add('نصف دجاجة', 7000)">إضافة +</button>
     </div>
 
-    <div class="section-title" onclick="toggle('sec2')">الرز والمرق <span>▼</span></div>
-    <div id="sec2" class="items-list">
-        <div class="item">
-            <span>تمن وعكود (10,000 د.ع)</span>
-            <button class="add-btn" onclick="addItem('تمن وعكود', 10000)">إضافة +</button>
-        </div>
+    <div class="section">🍚 الوجبات</div>
+    <div class="item">
+        <span>تمن وعكود (10,000)</span>
+        <button class="add" onclick="add('تمن وعكود', 10000)">إضافة +</button>
     </div>
 
-    <div class="cart-box">
-        <strong>🛒 سلة الطلبات:</strong>
-        <div id="cart-content" style="margin-top:10px;"></div>
-        <div class="total-price">الإجمالي: <span id="total">0</span> د.ع</div>
+    <div class="cart">
+        <strong>🛒 سلتك:</strong>
+        <div id="list"></div>
+        <hr>
+        <strong>المجموع: <span id="total">0</span> د.ع</strong>
     </div>
 
-    <div class="inputs">
-        <input type="text" id="name" placeholder="👤 اسمك الكامل">
-        <input type="tel" id="phone" placeholder="📱 رقم هاتفك">
-        <textarea id="address" rows="2" placeholder="🏠 العنوان الكامل (منطقة، شارع، نقطة دالة)"></textarea>
-    </div>
+    <input type="text" id="user-name" placeholder="👤 اسمك">
+    <input type="tel" id="user-phone" placeholder="📱 رقمك">
+    <textarea id="user-addr" placeholder="🏠 عنوانك بالتفصيل"></textarea>
 
-    <button class="send-btn" onclick="sendOrder()">إرسال الطلب واتساب ✅</button>
+    <button class="order-btn" onclick="send()">إرسال الطلب واتساب ✅</button>
 </div>
 
 <script>
     let cart = [];
-    let total = 0;
-    const ref = new URLSearchParams(window.location.search).get('ref') || 'زبون مباشر';
+    let sum = 0;
+    const ref = new URLSearchParams(window.location.search).get('ref') || 'مباشر';
 
-    function toggle(id) {
-        let el = document.getElementById(id);
-        el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+    function add(n, p) {
+        cart.push({n, p});
+        sum += p;
+        render();
     }
 
-    function addItem(name, price) {
-        cart.push({name, price});
-        total += price;
-        showCart();
+    function remove(i) {
+        sum -= cart[i].p;
+        cart.splice(i, 1);
+        render();
     }
 
-    function removeItem(index) {
-        total -= cart[index].price;
-        cart.splice(index, 1);
-        showCart();
-    }
-
-    function showCart() {
-        const div = document.getElementById('cart-content');
-        div.innerHTML = cart.map((item, i) => `
+    function render() {
+        const d = document.getElementById('list');
+        d.innerHTML = cart.map((item, i) => `
             <div class="cart-item">
-                <span>${item.name}</span>
-                <span>${item.price.toLocaleString()} <button class="del-btn" onclick="removeItem(${i})">حذف</button></span>
+                <span>${item.n}</span>
+                <span>${item.p.toLocaleString()} <button class="del" onclick="remove(${i})">حذف</button></span>
             </div>
         `).join('');
-        document.getElementById('total').textContent = total.toLocaleString();
+        document.getElementById('total').textContent = sum.toLocaleString();
     }
 
-    function sendOrder() {
-        const n = document.getElementById('name').value;
-        const p = document.getElementById('phone').value;
-        const a = document.getElementById('address').value;
+    function send() {
+        const name = document.getElementById('user-name').value;
+        const phone = document.getElementById('user-phone').value;
+        const addr = document.getElementById('user-addr').value;
 
-        if(!n || !p || !a || cart.length === 0) { alert('اكمل البيانات والطلبات أولاً!'); return; }
+        if(!name || !phone || !addr || cart.length === 0) { alert('املأ البيانات والطلبات!'); return; }
 
-        let items = cart.map(i => `• ${i.name}`).join('%0A');
-        let msg = `*طلب جديد - مطعم الباهر*%0A------------------%0A👤 الاسم: ${n}%0A📱 الهاتف
+        let items = cart.map(i => `• ${i.n}`).join('%0A');
+        let msg = `*طلب جديد - الباهر*%0A👤 الاسم: ${name}%0A📱 الهاتف: ${phone}%0A🏠 العنوان: ${addr}%0A🍴 الطلبات:%0A${items}%0A💰 المجموع: ${sum.toLocaleString()}%0A📢 المصدر: ${ref}`;
+        
+        window.open(`https://wa.me/9647823906644?text=${msg}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
