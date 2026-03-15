@@ -1,27 +1,48 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>لوحة التحكم</title><style>
-body{font-family:Arial;padding:15px;background:#f0f2f5;text-align:center}.box{max-width:450px;background:#fff;padding:20px;margin:auto;border-radius:15px;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
-input,button{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:1px solid #ccc;box-sizing:border-box}
-.btn-add{background:#28a745;color:#fff;font-weight:bold;border:none;cursor:pointer}
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>إدارة الباهر</title><style>
+body{font-family:Arial;padding:15px;background:#f0f2f5;text-align:center}.box{max-width:500px;background:#fff;padding:20px;margin:auto;border-radius:15px;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+h2{color:#d32f2f;border-bottom:2px solid #eee;padding-bottom:10px}
+.tab{display:none;padding:10px} .active{display:block}
+.tabs-btn{display:flex;gap:5px;margin-bottom:15px} .tabs-btn button{flex:1;padding:10px;cursor:pointer;border:none;border-radius:5px;background:#ddd} .tabs-btn .sel{background:#d32f2f;color:#fff}
+input,textarea,button{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:1px solid #ccc;box-sizing:border-box}
+.btn-save{background:#28a745;color:#fff;font-weight:bold;border:none;cursor:pointer}
 .item-row{display:flex;justify-content:space-between;align-items:center;background:#eee;padding:10px;margin-top:10px;border-radius:8px}
 .btn-del{background:#ff4d4d;color:#fff;border:none;padding:5px 10px;border-radius:5px}
-</style></head><body><div class="box"><h2>🛠 إدارة الباهر</h2>
-<input type="text" id="cat" placeholder="القسم (مثلاً: عروض، كباب، تمن)">
-<input type="text" id="name" placeholder="اسم الأكلة">
-<input type="number" id="price" placeholder="السعر">
-<button class="btn-add" onclick="add()">➕ إضافة</button><hr>
-<div id="list">⏳ تحميل...</div></div>
+</style></head><body><div class="box"><h2>👑 لوحة تحكم مطعم الباهر</h2>
+<div class="tabs-btn">
+    <button id="b1" class="sel" onclick="showTab(1)">الأصناف</button>
+    <button id="b2" onclick="showTab(2)">إعدادات المطعم</button>
+</div>
+<div id="tab1" class="tab active">
+    <input type="text" id="cat" placeholder="القسم (مثلاً: عروض، كباب، بيتزا)">
+    <input type="text" id="name" placeholder="اسم الأكلة">
+    <input type="number" id="price" placeholder="السعر">
+    <button class="btn-save" onclick="add()">➕ إضافة للمنيو</button><hr>
+    <div id="list">⏳ تحميل الأصناف...</div>
+</div>
+<div id="tab2" class="tab">
+    <input type="text" id="r_name" placeholder="اسم المطعم">
+    <input type="text" id="r_logo" placeholder="رابط صورة اللوكو (رابط URL)">
+    <textarea id="r_msg" placeholder="رسالة الترحيب"></textarea>
+    <button class="btn-save" onclick="saveSettings()">💾 حفظ الإعدادات</button>
+</div></div>
 <script>
-const URL = "https://albaher-1ec78-default-rtdb.firebaseio.com/items";
+const DB = "https://albaher-1ec78-default-rtdb.firebaseio.com/";
+function showTab(n){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('tab'+n).classList.add('active');document.querySelectorAll('.tabs-btn button').forEach(b=>b.classList.remove('sel'));document.getElementById('b'+n).classList.add('sel');}
 async function add(){
     const cat=document.getElementById('cat').value, name=document.getElementById('name').value, price=document.getElementById('price').value;
     if(!cat||!name||!price)return alert("املأ الحقول!");
-    await fetch(URL+".json",{method:'POST',body:JSON.stringify({cat,name,price:parseInt(price)})});
-    location.reload();
+    await fetch(DB+"items.json",{method:'POST',body:JSON.stringify({cat,name,price:parseInt(price)})}); location.reload();
 }
-async function del(id){if(confirm("حذف؟")){await fetch(`${URL}/${id}.json`,{method:'DELETE'});location.reload()}}
+async function del(id){if(confirm("حذف؟")){await fetch(`${DB}items/${id}.json`,{method:'DELETE'});location.reload()}}
+async function saveSettings(){
+    const name=document.getElementById('r_name').value, logo=document.getElementById('r_logo').value, msg=document.getElementById('r_msg').value;
+    await fetch(DB+"settings.json",{method:'PUT',body:JSON.stringify({name,logo,msg})}); alert("تم الحفظ بنجاح ✅");
+}
 async function load(){
-    const res=await fetch(URL+".json");const data=await res.json();let h='';
-    for(let id in data){h+=`<div class="item-row"><span><b>${data[id].cat}:</b> ${data[id].name}</span><button class="btn-del" onclick="del('${id}')">حذف</button></div>`}
+    const resI=await fetch(DB+"items.json"); const items=await resI.json(); let h='';
+    for(let id in items){h+=`<div class="item-row"><span>${items[id].cat}: ${items[id].name}</span><button class="btn-del" onclick="del('${id}')">حذف</button></div>`}
     document.getElementById('list').innerHTML=h||'فارغ حالياً';
+    const resS=await fetch(DB+"settings.json"); const sett=await resS.json();
+    if(sett){document.getElementById('r_name').value=sett.name||'';document.getElementById('r_logo').value=sett.logo||'';document.getElementById('r_msg').value=sett.msg||'';}
 }load();
 </script></body></html>
