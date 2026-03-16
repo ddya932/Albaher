@@ -8,20 +8,27 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #d32f2f; --dark: #333; --light: #f4f4f4; }
+        :root { --primary: #d32f2f; --dark: #333; --light: #f4f4f4; --grey: #aaa; --out-of-stock: #888; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--light); margin: 0; padding: 0; padding-bottom: 80px;}
         .header { background: var(--primary); color: white; padding: 20px; text-align: center; font-size: 28px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;}
+        .promo-banner { background: #e3f2fd; color: #1565c0; padding: 10px; font-weight: bold; font-size: 16px; border-bottom: 2px solid #90caf9; display: none; }
         .status-banner { background: #ffcc00; color: #b71c1c; text-align: center; padding: 15px; font-weight: bold; display: none; font-size: 18px;}
         .info-bar { display: flex; justify-content: space-around; background: white; padding: 10px; font-size: 14px; color: var(--dark); border-bottom: 2px solid #ddd; font-weight: bold;}
         .container { padding: 15px; }
-        .category-title { border-right: 4px solid var(--primary); padding-right: 10px; color: var(--dark); margin-top: 20px; }
-        .item-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; display: flex; box-shadow: 0 2px 8px rgba(0,0,0,0.1); align-items: center;}
+        .category-title { border-right: 4px solid var(--primary); padding-right: 10px; color: var(--dark); margin-top: 20px; font-size: 20px; }
+        .item-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; display: flex; box-shadow: 0 2px 8px rgba(0,0,0,0.1); align-items: center; position: relative; overflow: hidden; transition: 0.3s;}
+        .item-card.out-of-stock { background: #f0f0f0; border: 1px solid #ddd; }
+        .item-card.out-of-stock .item-details h3, .item-card.out-of-stock .item-details p { color: var(--out-of-stock); }
         .item-img { width: 90px; height: 90px; border-radius: 10px; object-fit: cover; margin-left: 15px; border: 1px solid #eee; }
+        .item-card.out-of-stock .item-img { opacity: 0.5; filter: grayscale(100%); }
         .item-details { flex-grow: 1; }
         .item-details h3 { margin: 0 0 5px 0; font-size: 18px; color: var(--dark); }
         .item-details p { margin: 0; color: var(--primary); font-weight: bold; font-size: 16px; }
+        .out-of-stock-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; display: none;}
+        .item-card.out-of-stock .out-of-stock-badge { display: block; }
         .add-btn { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-top: 10px; width: 100%; transition: 0.3s;}
         .add-btn:active { background: #b71c1c; }
+        .item-card.out-of-stock .add-btn { background: var(--out-of-stock); cursor: not-allowed; }
         .cart-bar { position: fixed; bottom: 0; right: 0; left: 0; background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.2);}
         .checkout-btn { background: #25D366; color: white; border: none; padding: 10px 20px; border-radius: 25px; font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 8px;}
     </style>
@@ -29,6 +36,7 @@
 <body>
 
     <div class="header">🍽️ مطعم الباهر</div>
+    <div class="promo-banner" id="promo-banner"><marquee id="promo-text"></marquee></div>
     <div class="status-banner" id="status-banner">🚫 المطعم مغلق حالياً، نعتذر عن استقبال الطلبات.</div>
     
     <div class="info-bar" id="info-bar">
@@ -49,21 +57,25 @@
     </div>
 
     <script>
-        // إعدادات قاعدة البيانات
         const firebaseConfig = { databaseURL: "https://albaher-1ec78-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
 
         let cart = [];
-        let settings = { phone: "07830834849", status: "open", fee: 0, minOrder: 0, time: "30 دقيقة" };
+        let settings = { phone: "07830834849", status: "open", fee: 0, minOrder: 0, time: "30 دقيقة", promo: "" };
 
-        // جلب الإعدادات من لوحة الإدارة
+        // جلب الإعدادات
         db.ref('settings').on('value', (snapshot) => {
-            if(snapshot.exists()) {
-                settings = snapshot.val();
-            }
+            if(snapshot.exists()) { settings = snapshot.val(); }
             
-            // التحكم بحالة المطعم
+            // شريط العروض والترحيب
+            if(settings.promo && settings.promo.trim() !== "") {
+                document.getElementById('promo-banner').style.display = 'block';
+                document.getElementById('promo-text').innerText = settings.promo;
+            } else {
+                document.getElementById('promo-banner').style.display = 'none';
+            }
+
             if(settings.status === "closed") {
                 document.getElementById('status-banner').style.display = 'block';
                 document.getElementById('cart-bar').style.display = 'none';
@@ -71,25 +83,23 @@
                 document.getElementById('status-banner').style.display = 'none';
                 document.getElementById('cart-bar').style.display = 'flex';
             }
-
             document.getElementById('time-display').innerText = settings.time || "30 دقيقة";
             document.getElementById('fee-display').innerText = settings.fee || "0";
         });
 
-        // جلب المنيو وترتيبه حسب الأقسام
+        // جلب المنيو وترتيبه
         db.ref('menu').on('value', (snapshot) => {
             const container = document.getElementById('menu-container');
             container.innerHTML = '';
             
             if(!snapshot.exists()) {
-                container.innerHTML = '<div style="text-align:center;">لا توجد أكلات حالياً</div>';
+                container.innerHTML = '<div style="text-align:center; margin-top: 30px; font-size: 18px; color: #555;">المنيو قيد التجهيز... 🍽️</div>';
                 return;
             }
 
             let items = [];
             snapshot.forEach(child => { items.push({id: child.key, ...child.val()}); });
 
-            // تجميع الأكلات حسب القسم
             let grouped = {};
             items.forEach(item => {
                 let cat = item.category || "القائمة الرئيسية";
@@ -101,84 +111,3 @@
                 container.innerHTML += `<h2 class="category-title">${cat}</h2>`;
                 grouped[cat].forEach(item => {
                     let imgHtml = item.img ? `<img src="${item.img}" class="item-img">` : `<div class="item-img" style="background:#eee; display:flex; align-items:center; justify-content:center; font-size:24px;">🍽️</div>`;
-                    container.innerHTML += `
-                        <div class="item-card">
-                            ${imgHtml}
-                            <div class="item-details">
-                                <h3>${item.name}</h3>
-                                <p>${item.price} د.ع</p>
-                                <button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">➕ إضافة للسلة</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-        });
-
-        function addToCart(name, price) {
-            cart.push({name, price});
-            updateCart();
-            // تأثير بصري عند الإضافة
-            document.getElementById('cart-bar').style.background = '#d32f2f';
-            setTimeout(() => document.getElementById('cart-bar').style.background = '#333', 300);
-        }
-
-        function updateCart() {
-            document.getElementById('cart-count').innerText = cart.length;
-            let total = cart.reduce((a, b) => a + Number(b.price), 0);
-            document.getElementById('cart-total').innerText = total;
-        }
-
-        function checkout() {
-            if(cart.length === 0) return alert("سلتك فارغة! الرجاء اختيار أكلات أولاً.");
-            
-            let total = cart.reduce((a, b) => a + Number(b.price), 0);
-            let minOrder = Number(settings.minOrder) || 0;
-            
-            if(total < minOrder) {
-                return alert("الحد الأدنى للطلب هو: " + minOrder + " د.ع");
-            }
-
-            let notes = prompt("هل لديك ملاحظات؟ (مثال: بدون بصل، كثر صوص) - اتركها فارغة واضغط موافق إذا لم يوجد:");
-            if (notes === null) return; // تم الإلغاء
-            
-            let deliveryFee = Number(settings.fee) || 0;
-            let finalTotal = total + deliveryFee;
-            
-            let msg = "✨ *طلب جديد من تطبيق الباهر* ✨%0A%0A";
-            msg += "🛒 *التفاصيل:*%0A";
-            
-            // ترتيب العناصر المكررة (مثال: 2x كباب)
-            let cartSummary = {};
-            cart.forEach(item => {
-                if(!cartSummary[item.name]) cartSummary[item.name] = {count: 0, price: Number(item.price)};
-                cartSummary[item.name].count += 1;
-            });
-
-            for(let name in cartSummary) {
-                let count = cartSummary[name].count;
-                let price = cartSummary[name].price * count;
-                msg += `▪️ ${count}x ${name} - (${price} د.ع)%0A`;
-            }
-
-            if(notes && notes.trim() !== "") {
-                msg += `%0A📝 *الملاحظات:* ${notes}%0A`;
-            }
-
-            msg += `%0A🛵 *أجرة التوصيل:* ${deliveryFee} د.ع%0A`;
-            msg += `💰 *الإجمالي الكلي:* ${finalTotal} د.ع%0A`;
-
-            // إضافة مصدر الطلب (طاولة أو إعلان)
-            let urlParams = new URLSearchParams(window.location.search);
-            if(urlParams.has('t')) msg += `%0A📍 *المصدر:* طاولة رقم ${urlParams.get('t')}`;
-            if(urlParams.has('ref')) msg += `%0A📢 *المصدر:* إعلان ${urlParams.get('ref')}`;
-
-            let phone = settings.phone || "07830834849";
-            if(phone.startsWith('0')) phone = phone.substring(1);
-            
-            let waLink = `https://wa.me/964${phone}?text=${msg}`;
-            window.open(waLink, '_blank');
-        }
-    </script>
-</body>
-</html>
