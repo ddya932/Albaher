@@ -6,73 +6,83 @@
     <title>لوحة قيادة الباهر</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #d32f2f; --dark: #333; --light: #f4f4f4; }
+        :root { --primary: #d32f2f; --dark: #333; --light: #f4f4f4; --success: #2e7d32; --warning: #f9a825; --info: #0277bd;}
         body { font-family: 'Segoe UI', sans-serif; background: var(--light); padding: 15px; margin: 0; padding-bottom: 50px;}
         .header { text-align: center; color: var(--primary); margin-bottom: 20px; font-size: 24px; font-weight: bold; border-bottom: 2px solid var(--primary); padding-bottom: 10px;}
         .box { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);}
-        h2 { color: var(--dark); margin-top: 0; font-size: 18px; display: flex; align-items: center; gap: 8px;}
+        h2 { color: var(--dark); margin-top: 0; font-size: 18px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;}
         label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; font-size: 14px;}
-        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 14px;}
-        input:focus, select:focus { border-color: var(--primary); outline: none;}
-        button { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s;}
-        button:active { background: #b71c1c; transform: scale(0.98);}
-        .btn-green { background: #25D366; }
-        .link-box { background: #e8f5e9; padding: 10px; border-radius: 5px; text-align: left; direction: ltr; word-break: break-all; font-size: 12px; display: none; color: #333; font-weight: bold;}
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px;}
+        button { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;}
+        button:active { transform: scale(0.98); }
+        .btn-success { background: var(--success); } .btn-warning { background: var(--warning); color: #333;} .btn-info { background: var(--info); } .btn-dark { background: var(--dark); }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px;}
+        th, td { text-align: right; padding: 12px; border-bottom: 1px solid #eee;}
+        th { background-color: #f8f9fa; color: var(--dark); }
+        .item-thumb { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; vertical-align: middle;}
+        .action-btns { display: flex; gap: 5px; justify-content: flex-start;}
+        .action-btn { width: auto; padding: 6px 10px; font-size: 12px; border-radius: 4px;}
+        .status-badge { padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;}
+        .status-ok { background: #e8f5e9; color: var(--success); }
+        .status-no { background: #ffebee; color: var(--primary); }
     </style>
 </head>
 <body>
 
     <div class="header">👑 مركز إدارة الباهر</div>
+    
+    <button class="btn-dark" onclick="window.location.href='index.html'" style="margin-bottom: 20px;">
+        <i class="fas fa-eye"></i> 👀 معاينة تطبيق الزبائن
+    </button>
 
     <div class="box">
-        <h2>⚙️ إعدادات المطعم العامة</h2>
+        <h2><i class="fas fa-cogs"></i> إعدادات المطعم العامة</h2>
+        <label>رقم الواتساب:</label> <input type="text" id="set-phone" placeholder="مثال: 07830834849">
         
-        <label>رقم الواتساب (لاستلام الطلبات):</label>
-        <input type="text" id="set-phone" placeholder="مثال: 07830834849">
+        <label>رسالة الترحيب أو العروض (تظهر للزبائن):</label> 
+        <input type="text" id="set-promo" placeholder="مثال: أهلاً بكم! خصم 10% بمناسبة الافتتاح">
         
-        <label>حالة المطعم (يستقبل طلبات؟):</label>
+        <label>حالة المطعم:</label>
         <select id="set-status">
-            <option value="open">✅ مفتوح - يستقبل الطلبات</option>
-            <option value="closed">🚫 مغلق - لا يستقبل طلبات (تعزيل)</option>
+            <option value="open">✅ مفتوح ويستقبل طلبات</option>
+            <option value="closed">🚫 مغلق (تعزيل)</option>
         </select>
-
-        <label>أجرة التوصيل الثابتة (بالدينار):</label>
-        <input type="number" id="set-fee" placeholder="مثال: 2000">
-
-        <label>الحد الأدنى للطلب (بالدينار):</label>
-        <input type="number" id="set-min" placeholder="مثال: 5000">
-
-        <label>وقت التوصيل المتوقع (يظهر للزبون):</label>
-        <input type="text" id="set-time" placeholder="مثال: 30 - 45 دقيقة">
-
-        <button onclick="saveSettings()">💾 حفظ ونشر الإعدادات فوراً</button>
+        <label>أجرة التوصيل الثابتة (د.ع):</label> <input type="number" id="set-fee">
+        <label>الحد الأدنى للطلب (د.ع):</label> <input type="number" id="set-min">
+        <label>وقت التوصيل:</label> <input type="text" id="set-time" placeholder="مثال: 30 - 45 دقيقة">
+        <button onclick="saveSettings()"><i class="fas fa-save"></i> حفظ ونشر الإعدادات</button>
     </div>
 
     <div class="box">
-        <h2>🍔 إضافة أكلة جديدة للمنيو</h2>
-        
-        <label>القسم (يجمع الأكلات المتشابهة):</label>
-        <input type="text" id="item-cat" placeholder="مثال: مشويات، قسم الغربي، مقبلات...">
-        
-        <label>اسم الأكلة:</label>
-        <input type="text" id="item-name" placeholder="مثال: نفر كباب عراقي">
-        
-        <label>السعر (بالدينار):</label>
-        <input type="number" id="item-price" placeholder="مثال: 7000">
-        
-        <label>رابط الصورة (اختياري، يفضل من صور الـ AI):</label>
-        <input type="text" id="item-img" placeholder="انسخ رابط الصورة هنا">
-        
-        <button onclick="addItem()">➕ إضافة للمنيو</button>
+        <h2><i class="fas fa-plus-circle"></i> إضافة أكلة جديدة</h2>
+        <input type="text" id="item-cat" placeholder="القسم (مثال: مشويات)">
+        <input type="text" id="item-name" placeholder="اسم الأكلة">
+        <input type="number" id="item-price" placeholder="السعر (د.ع)">
+        <input type="text" id="item-img" placeholder="رابط الصورة (اختياري)">
+        <button class="btn-info" onclick="addItem()"><i class="fas fa-hamburger"></i> إضافة للمنيو</button>
     </div>
 
     <div class="box">
-        <h2>📢 نظام المعلنين (روابط التتبع)</h2>
-        <label>اسم البيج أو المعلن:</label>
-        <input type="text" id="marketer-name" placeholder="مثال: بيج النصر">
-        <button class="btn-green" onclick="generateLink()">🔗 توليد رابط التتبع للمعلن</button>
-        <div id="marketer-link" class="link-box" style="margin-top:10px;"></div>
+        <h2><i class="fas fa-tasks"></i> إدارة المنيو والتحكم بالأكلات</h2>
+        <div id="loading-menu" style="text-align:center;">جاري تحميل المنيو الحالي...</div>
+        <div style="overflow-x:auto;">
+            <table id="menu-table" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>الصورة</th>
+                        <th>القسم</th>
+                        <th>الاسم</th>
+                        <th>السعر</th>
+                        <th>الحالة</th>
+                        <th>التحكم</th>
+                    </tr>
+                </thead>
+                <tbody id="menu-list"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
@@ -80,11 +90,12 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
 
-        // جلب وعرض الإعدادات الحالية حتى تقدر تعدلها
+        // جلب الإعدادات
         db.ref('settings').on('value', (snapshot) => {
             if(snapshot.exists()) {
                 let s = snapshot.val();
                 document.getElementById('set-phone').value = s.phone || "";
+                document.getElementById('set-promo').value = s.promo || "";
                 document.getElementById('set-status').value = s.status || "open";
                 document.getElementById('set-fee').value = s.fee || "0";
                 document.getElementById('set-min').value = s.minOrder || "0";
@@ -95,48 +106,82 @@
         // حفظ الإعدادات
         function saveSettings() {
             let phone = document.getElementById('set-phone').value;
-            if(!phone) { alert("يجب كتابة رقم الواتساب الخاص بك!"); return; }
-
+            if(!phone) return alert("اكتب رقم الواتساب!");
             db.ref('settings').set({
-                phone: phone,
+                phone, 
+                promo: document.getElementById('set-promo').value,
                 status: document.getElementById('set-status').value,
                 fee: document.getElementById('set-fee').value,
                 minOrder: document.getElementById('set-min').value,
                 time: document.getElementById('set-time').value
-            }).then(() => {
-                alert("✅ تم حفظ الإعدادات! التطبيق تحدث عند كل الزبائن.");
-            }).catch(err => alert("حدث خطأ: " + err));
+            }).then(() => alert("✅ تم نشر الإعدادات للزبائن!")).catch(err => alert("خطأ: " + err));
         }
 
-        // إضافة أكلة جديدة
+        // إضافة أكلة
         function addItem() {
             let cat = document.getElementById('item-cat').value || "القائمة الرئيسية";
             let name = document.getElementById('item-name').value;
             let price = document.getElementById('item-price').value;
             let img = document.getElementById('item-img').value;
-            
-            if(!name || !price) {
-                alert("⚠️ الرجاء كتابة اسم وسعر الأكلة على الأقل!");
-                return;
-            }
-
-            db.ref('menu').push({ category: cat, name: name, price: price, img: img }).then(() => {
-                alert("✅ تم إضافة الأكلة للمنيو بنجاح!");
-                // تفريغ الحقول ما عدا القسم حتى يسهل الإضافة المتتالية
-                document.getElementById('item-name').value = '';
-                document.getElementById('item-price').value = '';
-                document.getElementById('item-img').value = '';
-            }).catch(err => alert("حدث خطأ: " + err));
+            if(!name || !price) return alert("اكتب الاسم والسعر!");
+            db.ref('menu').push({ category: cat, name, price, img, available: true }).then(() => {
+                alert("✅ تم إضافة الأكلة!");
+                document.getElementById('item-name').value = ''; document.getElementById('item-price').value = ''; document.getElementById('item-img').value = '';
+            });
         }
 
-        // توليد رابط المعلن
-        function generateLink() {
-            let name = document.getElementById('marketer-name').value.trim().replace(/\s+/g, '_');
-            if(!name) return alert("اكتب اسم المعلن أولاً");
-            let link = `https://ddya932.github.io/Albaher/?ref=${name}`;
-            let box = document.getElementById('marketer-link');
-            box.innerText = link;
-            box.style.display = 'block';
+        // جلب وإدارة المنيو
+        db.ref('menu').on('value', (snapshot) => {
+            const list = document.getElementById('menu-list');
+            const table = document.getElementById('menu-table');
+            const loading = document.getElementById('loading-menu');
+            list.innerHTML = '';
+            
+            if(!snapshot.exists()) { loading.innerText = "المنيو فارغ! ضيف أكلات لياد"; loading.style.display="block"; table.style.display="none"; return;}
+            
+            loading.style.display="none"; table.style.display="table";
+
+            snapshot.forEach(child => {
+                let item = child.val();
+                let id = child.key;
+                let isAvailable = item.available !== false;
+                
+                let imgHtml = item.img ? `<img src="${item.img}" class="item-thumb">` : `<div class="item-thumb" style="background:#eee; display:flex; align-items:center; justify-content:center;">🍽️</div>`;
+                
+                let statusBadge = isAvailable ? `<span class="status-badge status-ok">متوفر ✅</span>` : `<span class="status-badge status-no">خلصان ❌</span>`;
+                let stockBtn = isAvailable ? `<button class="action-btn btn-warning" onclick="toggleStock('${id}', true)"><i class="fas fa-times"></i> خلصان؟</button>` : `<button class="action-btn btn-success" onclick="toggleStock('${id}', false)"><i class="fas fa-check"></i> وفر؟</button>`;
+
+                list.innerHTML += `
+                    <tr>
+                        <td>${imgHtml}</td>
+                        <td>${item.category || "عام"}</td>
+                        <td>${item.name}</td>
+                        <td>${item.price}</td>
+                        <td>${statusBadge}</td>
+                        <td class="action-btns">
+                            ${stockBtn}
+                            <button class="action-btn btn-info" onclick="editPrice('${id}', '${item.name}', ${item.price})"><i class="fas fa-pencil-alt"></i></button>
+                            <button class="action-btn btn-primary" style="background:var(--primary)" onclick="deleteItem('${id}', '${item.name}')"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+
+        // دوال التحكم بالمنيو
+        function toggleStock(id, currentAvailable) {
+            db.ref(`menu/${id}`).update({ available: !currentAvailable }).then(() => alert("✅ تم تحديث حالة الأكلة عند الزبائن."));
+        }
+
+        function editPrice(id, name, currentPrice) {
+            let newPrice = prompt(`تعديل سعر الأكلة (${name}):`, currentPrice);
+            if(newPrice === null || newPrice === "" || isNaN(newPrice)) return;
+            db.ref(`menu/${id}`).update({ price: newPrice }).then(() => alert("✅ تم تعديل السعر."));
+        }
+
+        function deleteItem(id, name) {
+            if(!confirm(`هل أنت متأكد من حذف الأكلة (${name}) نهائياً من المنيو؟`)) return;
+            db.ref(`menu/${id}`).remove().then(() => alert("✅ تم حذف الأكلة نهائياً."));
         }
     </script>
 </body>
